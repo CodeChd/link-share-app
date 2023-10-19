@@ -6,6 +6,10 @@ export default {
       Ins: "Instrument Sans, sans-serif",
     },
     extend: {
+      backgroundImage: {
+          email: "url(/images/icon-email.svg)",
+          password: "url(/images/icon-password.svg)"
+      },
       colors: {
         royalBlue: "#633CFF",
         lavender: "#BEADFF",
