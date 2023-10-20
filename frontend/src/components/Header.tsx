@@ -5,7 +5,10 @@ const Header = () => {
 
   return (
     <header className="p-5">
-      <div id="header-content" className="flex justify-between p-4 bg-white">
+      <div
+        id="header-content"
+        className="flex items-center justify-between p-4 bg-white"
+      >
         <img
           src="/images/logo-devlinks-large.svg"
           alt="logo"
@@ -57,9 +60,12 @@ const Header = () => {
           </Link>
         </nav>
 
-        <button className="p-2 px-4 rounded-lg border-royalBlue border-solid border-2 text-royalBlue font-bold">
+        <Link
+          to="/preview/:publicId"
+          className="p-2 px-4 rounded-lg border-royalBlue border-solid border text-royalBlue font-bold"
+        >
           Preview
-        </button>
+        </Link>
       </div>
     </header>
   );

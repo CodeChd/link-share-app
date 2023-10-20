@@ -16,8 +16,8 @@ import Profile from "./pages/Profile.tsx";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="" element={<App />}>
-      <Route index={true} path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
+      <Route index={true} path="/" element={<Home />} />
       <Route path="/register" element={<Register />} />
       <Route path="/profile" element={<Profile />} />
     </Route>
