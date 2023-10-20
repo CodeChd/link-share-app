@@ -13,7 +13,7 @@ const Login = () => {
   };
 
   return (
-    <div className="grid place-content-center items-center min-h-screen bg-snow gap-8 px-4">
+    <div className="grid place-content-center items-center min-h-screen  gap-8 px-4">
       <div className="mx-auto">
         <img src="/images/logo-devlinks-large.svg" alt="logo" />
       </div>
