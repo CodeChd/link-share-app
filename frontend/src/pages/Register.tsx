@@ -1,8 +1,9 @@
 import { FormEvent, useState } from "react";
 
-const Login = () => {
+const Register = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [error, setError] = useState<boolean>(false);
 
   const submitHandler = (e: FormEvent<HTMLFormElement>) => {
@@ -23,10 +24,10 @@ const Login = () => {
       >
         <div className="heading ">
           <button className="text-h-m-b font-bold mb-2 text-richBlack ">
-            Login
+            Create account
           </button>
           <p className="text-mediumGrey text-b-m tracking-wide">
-            Add your details below to get back into the app
+            Let’s get you started sharing your links!
           </p>
         </div>
 
@@ -74,27 +75,54 @@ const Login = () => {
             onChange={(e) => setPassword(e.target.value)}
             id="password"
             type="password"
-            placeholder="Enter your password"
+            placeholder="At least 8 characters"
             className={`bg-password bg-no-repeat h-12 p-2 ps-8 bg-[left_0.4rem_bottom_0.8rem] outline-none bg-[length:15px] border-solid border-2  rounded-lg focus:border focus:border-solid focus:border-royalBlue focus:drop-shadow-input
             ${
               error && password.length <= 0
                 ? "border-crimson"
                 : "border-lightGrey"
-            } 
+            }
+            `}
+          />
+          <label
+            htmlFor="confirmPassword"
+            className={`mt-2 flex justify-between ${
+              error && confirmPassword.length <= 0 ? "text-crimson" : ""
+            }`}
+          >
+            Confirm password
+            {error && confirmPassword.length <= 0 && (
+              <span className="relative inline-block translate-y-[3.2rem] -translate-x-4">
+                Can't be empty
+              </span>
+            )}
+          </label>
+          <input
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            id="confirmPassword"
+            type="password"
+            placeholder="At least 8 characters"
+            className={`bg-password bg-no-repeat h-12 p-2 ps-8 bg-[left_0.4rem_bottom_0.8rem] outline-none bg-[length:15px] border-solid border-2  rounded-lg focus:border focus:border-solid focus:border-royalBlue focus:drop-shadow-input
+            ${
+              error && confirmPassword.length <= 0
+                ? "border-crimson"
+                : "border-lightGrey"
+            }
             `}
           />
         </div>
         <button
           type="submit"
-          className="bg-royalBlue text-white rounded-md p-3  w-full mt-5 hover:bg-lavender transition-colors ease-out disabled:bg-lavender/40 "
+          className="bg-royalBlue text-white rounded-md p-3  w-full mt-5 hover:bg-lavender transition-colors ease-out disabled:bg-lavender/40"
         >
           Login
         </button>
 
         <p className="mt-4 text-center text-mediumGrey">
-          Don't have an account?{" "}
-          <a href="/register" className="text-royalBlue ">
-            Create account
+          Already have an account?{" "}
+          <a href="/login" className="text-royalBlue ">
+            Login
           </a>
         </p>
       </form>
@@ -102,4 +130,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;
