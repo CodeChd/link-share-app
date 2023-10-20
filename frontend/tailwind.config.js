@@ -27,6 +27,9 @@ export default {
         "b-m": "16px",
         "b-s": "12px",
       },
+      dropShadow: {
+        'input': '0 10px 15px rgba(99, 60, 255, 0.1)',
+      }
     },
   },
   plugins: [],

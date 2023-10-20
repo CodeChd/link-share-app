@@ -14,8 +14,8 @@ import Home from "./pages/Home.tsx";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="" element={<App />}>
-      <Route index={true} path="/login" element={<Login />} />
-      <Route path="/" element={<Home />} />
+      <Route index={true} path="/" element={<Home />} />
+      <Route path="/login" element={<Login />} />
     </Route>
   )
 );
