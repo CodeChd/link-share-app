@@ -1,6 +1,6 @@
 const Home = () => {
   return (
-    <div className="grid grid-cols-[minmax(300px,_700px)_1fr] gap-5 px-5 ">
+    <div className="grid grid-cols-[minmax(300px,_800px)_1fr] gap-5 px-5 ">
       <div
         id="left"
         className="bg-white p-[5rem] flex justify-center rounded-lg"
@@ -9,7 +9,7 @@ const Home = () => {
         <img src="/images/illustration-phone-mockup.svg" alt="" />
       </div>
 
-      <div id="right" className="relative bg-white p-[2rem]">
+      <div id="right" className="relative bg-white p-[2rem] rounded-md">
         <div>
           <h1 className="text-h-m-b font-bold text-richBlack">
             Customize your links
