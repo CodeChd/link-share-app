@@ -61,7 +61,7 @@ const Header = () => {
         </nav>
 
         <Link
-          to="/preview/:publicId"
+          to="/preview"
           className="p-2 px-4 rounded-lg border-royalBlue border-solid border text-royalBlue font-bold"
         >
           Preview

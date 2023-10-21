@@ -6,8 +6,10 @@ function App() {
 
   return (
     <>
-      {pathname !== "/login" && <Header />}
-      <main className="min-h-[80vhvh]">
+      {pathname !== "/login" &&
+        pathname !== "/register" &&
+        pathname !== "/preview" && <Header />}
+      <main className="min-h-[80vh]">
         <Outlet />
       </main>
     </>
