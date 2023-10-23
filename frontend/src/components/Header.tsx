@@ -62,7 +62,7 @@ const Header = () => {
 
         <Link
           to="/preview"
-          className="p-2 px-4 rounded-lg border-royalBlue border-solid border text-royalBlue font-bold"
+          className="p-2 px-4 rounded-lg hover:bg-babyPowder/50 border-royalBlue border-solid border text-royalBlue font-bold"
         >
           Preview
         </Link>

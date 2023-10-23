@@ -3,16 +3,16 @@ import { Link } from "react-router-dom";
 const Preview = () => {
   return (
     <>
-      <div className="bg-royalBlue h-[25rem] w-full p-7 rounded-bl-[3rem] rounded-br-[3rem]">
+      <div className="bg-royalBlue h-[25rem] w-full p-4 rounded-bl-[3rem] rounded-br-[3rem]">
         <div className="bg-white p-2 rounded-lg w-full">
           <nav className=" p-2  w-full flex justify-between">
             <Link
               to="/"
-              className="p-3 px-8  text-center font-bold rounded-md border-royalBlue text-royalBlue border-solid  border "
+              className="p-3 px-8 hover:bg-babyPowder/50 text-center font-bold rounded-md border-royalBlue text-royalBlue border-solid  border "
             >
               Back to Editor
             </Link>
-            <button className="rounded-md p-2 px-8 text-white bg-royalBlue font-bold ">
+            <button className="rounded-md p-2 px-8 text-white bg-royalBlue hover:bg-lavender font-bold ">
               Share Link
             </button>
           </nav>
@@ -30,7 +30,6 @@ const Preview = () => {
           /> */}
 
           <p className="text-royalBlue font-bold text-h-m-b">NO IMAGE</p>
-     
           <h1 className="text-h-m-b text-center text-richBlack font-bold my-2">
             CJ
           </h1>

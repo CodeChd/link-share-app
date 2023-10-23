@@ -8,7 +8,8 @@ export default {
     extend: {
       backgroundImage: {
           email: "url(/images/icon-email.svg)",
-          password: "url(/images/icon-password.svg)"
+          password: "url(/images/icon-password.svg)",
+          link: "url(/images/icon-link.svg)"
       },
       colors: {
         royalBlue: "#633CFF",
