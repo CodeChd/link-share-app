@@ -1,13 +1,17 @@
 import { useState } from "react";
 import platforms from "../data/platformSlice";
 import { PlatformType } from "../data/platformSlice";
+import { LinkType, removeLink } from "../context/linkSlice";
+import { useDispatch } from "react-redux";
 
 interface PlatformValue {
   image: string;
   name: string;
 }
 
-const Links = () => {
+const Links = ({ data }: { data: LinkType }) => {
+  const dispatch = useDispatch();
+
   const [isClicked, setIsClicked] = useState<boolean>(false);
   const [platform, setPlatform] = useState({} as PlatformValue);
 
@@ -21,6 +25,9 @@ const Links = () => {
     setIsClicked(!isClicked);
   };
 
+  const DeleteLink = () => {
+    dispatch(removeLink(data.id));
+  };
   return (
     <div
       aria-label="Card-link"
@@ -35,9 +42,12 @@ const Links = () => {
               className="object-cover w-4"
             />
           </span>
-          Link #1
+          Link #{data.id}
         </p>
-        <button className="bg-transparent text-mediumGrey text-b-m">
+        <button
+          onClick={DeleteLink}
+          className="bg-transparent text-mediumGrey text-b-m"
+        >
           Remove
         </button>
       </div>

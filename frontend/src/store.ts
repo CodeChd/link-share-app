@@ -1,9 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
-import dragSliceReducer from "./context/drag&Drop";
+import linkSliceReducer from "./context/linkSlice";
 
 const store = configureStore({
   reducer: {
-    drag: dragSliceReducer,
+    link: linkSliceReducer,
   },
   devTools: true,
 });
