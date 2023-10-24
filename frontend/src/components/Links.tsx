@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import platforms from "../data/platformSlice";
 import { PlatformType } from "../data/platformSlice";
-import { LinkType, removeLink } from "../context/linkSlice";
+import { LinkType, addLink, removeLink } from "../context/linkSlice";
 import { useDispatch } from "react-redux";
 
 interface PlatformValue {
+  id: number;
   image: string;
   name: string;
 }
@@ -14,20 +15,36 @@ const Links = ({ data }: { data: LinkType }) => {
 
   const [isClicked, setIsClicked] = useState<boolean>(false);
   const [platform, setPlatform] = useState({} as PlatformValue);
-
-  const IsClicked = () => {
-    setIsClicked(!isClicked);
-  };
+  const [link, setLink] = useState<string>(data?.link || "");
+  const linkRef = useRef<HTMLInputElement | null>(null);
 
   const PlatformHandler = (platform: PlatformType) => {
     const { image, name } = platform;
     setPlatform((current) => ({ ...current, image, name }));
     setIsClicked(!isClicked);
+
+    //Update platform with link id
+    dispatch(addLink({ ...platform, id: data.id }));
+  };
+
+  const UpdateLink = () => {
+    const link = linkRef.current?.value;
+    if (link && platform) {
+      setLink(link);
+
+      // Update link width link id
+      dispatch(addLink({ ...platform, id: data.id, link }));
+    }
   };
 
   const DeleteLink = () => {
     dispatch(removeLink(data.id));
   };
+
+  const IsClicked = () => {
+    setIsClicked(!isClicked);
+  };
+
   return (
     <div
       aria-label="Card-link"
@@ -59,15 +76,15 @@ const Links = ({ data }: { data: LinkType }) => {
 
         <div className="relative p-4 rounded-md overflow-hidden bg-white mt-1">
           <legend className="absolute top-2 text-mediumGrey text-b-m">
-            {platform.image && platform.name ? (
+            {data.name && data.image ? (
               <button className="flex gap-4 bg-white w-full">
                 <img
-                  src={platform.image}
-                  alt={platform.name}
+                  src={data.image}
+                  alt={data.name}
                   width="18"
                   className="mt-1"
                 />
-                <p className="text-richBlack">{platform.name}</p>
+                <p className="text-richBlack">{data.name}</p>
               </button>
             ) : (
               "Select Platform"
@@ -110,6 +127,8 @@ const Links = ({ data }: { data: LinkType }) => {
         </label>
         <input
           type="text"
+          value={link}
+          onChange={UpdateLink}
           placeholder="e.g.https://www.github.com/CodeChd"
           className=" mt-1 w-full bg-link bg-no-repeat h-12 p-2 ps-8 bg-[left_0.4rem_bottom_0.8rem] outline-none bg-[length:15px] border-solid border-2  rounded-lg focus:border focus:border-solid  focus:border-royalBlue placeholder:text-mediumGrey/90"
         />

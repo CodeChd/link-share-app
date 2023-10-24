@@ -4,7 +4,7 @@ export interface LinkType {
   id: number;
   image: string;
   name: string;
-  link: string;
+  link?: string;
 }
 
 const initialState: {
@@ -31,7 +31,6 @@ const link = createSlice({
         );
       } else {
         state.linkItem = [...state.linkItem, link];
-
         //Resetting IDs to accommodate removed items.
         state.linkItem = state.linkItem.map((link, index) => ({
           ...link,

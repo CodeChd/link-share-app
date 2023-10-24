@@ -2,10 +2,9 @@ import Links from "../components/Links";
 import { useDispatch, useSelector } from "react-redux";
 import { LinkType } from "../context/linkSlice";
 import { addLink } from "../context/linkSlice";
-import { useState } from "react";
 import isObjectEmpty from "../utils/isObjectEmpty";
 
-interface LinkState {
+export interface LinkState {
   link: {
     linkItem: LinkType[];
   };
@@ -14,11 +13,9 @@ interface LinkState {
 const Home = () => {
   const dispatch = useDispatch();
   const { linkItem } = useSelector((state: LinkState) => state.link);
-  const [IdCounter, setIdCounter] = useState<number>(1);
 
   const AddLink = () => {
-    setIdCounter(IdCounter + 1);
-    const newLink = { id: IdCounter, image: "", name: "", link: "" };
+    const newLink = { id: linkItem.length + 1, image: "", name: "", link: "" };
     dispatch(addLink({ ...newLink }));
   };
 
@@ -60,11 +57,12 @@ const Home = () => {
               rx="4"
             >
               <a
-                href=""
-                className="bg-[#EEE] grid grid-cols-[auto_1fr_auto] px-4 mx-8 h-[44px] rounded-md overflow-hidden items-center text-left"
+                href={x.link}
+                target="_blank"
+                className="bg-[#EEE] grid grid-cols-[auto_1fr_auto] gap-2 px-4 mx-8 h-[44px] rounded-md overflow-hidden items-center text-left"
               >
-                  <img src={x.image} alt={x.name} />
-                  <p className="text-richBlack ">{x.name}</p>
+                <img src={x.image} alt={x.name} />
+                <p className="text-richBlack ">{x.name}</p>
               </a>
             </foreignObject>
           ))}
