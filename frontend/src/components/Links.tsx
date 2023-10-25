@@ -1,40 +1,25 @@
-import { useRef, useState } from "react";
-import platforms from "../data/platformSlice";
-import { PlatformType } from "../data/platformSlice";
+import { ChangeEvent, useState } from "react";
+import platforms from "../data/platforms";
+import { PlatformType } from "../data/platforms";
 import { LinkType, addLink, removeLink } from "../context/linkSlice";
 import { useDispatch } from "react-redux";
-
-interface PlatformValue {
-  id: number;
-  image: string;
-  name: string;
-}
 
 const Links = ({ data }: { data: LinkType }) => {
   const dispatch = useDispatch();
 
   const [isClicked, setIsClicked] = useState<boolean>(false);
-  const [platform, setPlatform] = useState({} as PlatformValue);
   const [link, setLink] = useState<string>(data?.link || "");
-  const linkRef = useRef<HTMLInputElement | null>(null);
 
   const PlatformHandler = (platform: PlatformType) => {
-    const { image, name } = platform;
-    setPlatform((current) => ({ ...current, image, name }));
     setIsClicked(!isClicked);
-
     //Update platform with link id
     dispatch(addLink({ ...platform, id: data.id }));
   };
 
-  const UpdateLink = () => {
-    const link = linkRef.current?.value;
-    if (link && platform) {
-      setLink(link);
-
-      // Update link width link id
-      dispatch(addLink({ ...platform, id: data.id, link }));
-    }
+  const UpdateLink = (e: ChangeEvent<HTMLInputElement>) => {
+    setLink(e.target.value);
+    // Update link with link id
+    dispatch(addLink({ ...data, id: data.id, link }));
   };
 
   const DeleteLink = () => {
