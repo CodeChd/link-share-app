@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { LinkType } from "../context/linkSlice";
 import { addLink } from "../context/linkSlice";
 import isObjectEmpty from "../utils/isObjectEmpty";
+import { platformColorMap } from "../data/platformColorMap";
+import { platformIconLightMap } from "../data/platformIconLightMap";
 
 export interface LinkState {
   link: {
@@ -59,10 +61,21 @@ const Home = () => {
               <a
                 href={x.link}
                 target="_blank"
-                className="bg-[#EEE] grid grid-cols-[auto_1fr_auto] gap-2 px-4 mx-8 h-[44px] rounded-md overflow-hidden items-center text-left"
+                className="cursor-pointer grid grid-cols-[auto_1fr_auto] gap-2 px-4 mx-8 h-[44px] rounded-md overflow-hidden items-center text-left drop-shadow-md"
+                style={{
+                  backgroundColor: !x.name ? "#EEE" : platformColorMap[x.name],
+                }}
               >
-                <img src={x.image} alt={x.name} />
-                <p className="text-richBlack ">{x.name}</p>
+                <img src={platformIconLightMap[x.name]} alt={x.name} />
+                <p
+                  className={
+                    x.name === "Frontend Mentor" || !x.name
+                      ? "text-richBlack"
+                      : "text-white"
+                  }
+                >
+                  {x.name}
+                </p>
               </a>
             </foreignObject>
           ))}

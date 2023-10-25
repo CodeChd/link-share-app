@@ -48,7 +48,7 @@ const platforms: PlatformType[] = [
   },
   {
     id: 9,
-    image: "/images/icon-codewars.svg",
+    image: "/images/icon-devto.svg",
     name: "Codewars",
   },
   {

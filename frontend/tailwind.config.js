@@ -7,9 +7,9 @@ export default {
     },
     extend: {
       backgroundImage: {
-          email: "url(/images/icon-email.svg)",
-          password: "url(/images/icon-password.svg)",
-          link: "url(/images/icon-link.svg)"
+        email: "url(/images/icon-email.svg)",
+        password: "url(/images/icon-password.svg)",
+        link: "url(/images/icon-link.svg)",
       },
       colors: {
         royalBlue: "#633CFF",
@@ -29,8 +29,8 @@ export default {
         "b-s": "12px",
       },
       dropShadow: {
-        'input': '0 10px 15px rgba(99, 60, 255, 0.1)',
-      }
+        input: "0 10px 15px rgba(99, 60, 255, 0.1)",
+      },
     },
   },
   plugins: [],

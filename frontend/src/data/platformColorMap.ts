@@ -2,47 +2,19 @@ interface ColorMap {
   [key: string]: string;
 }
 
-export const platformColorMap: ColorMap[] = [
-  {
-    Github: "#000000",
-  },
-  {
-    "Frontend Mentor": "#FF5733",
-  },
-  {
-    Twitter: "#1DA1F2",
-  },
-  {
-    LinkedIn: "#0A66C2",
-  },
-  {
-    Youtube: "#FF0000",
-  },
-  {
-    Facebook: "#1877F2",
-  },
-  {
-    Twitch: "#9146FF",
-  },
-  {
-    "Dev.to": "#0A0A0A",
-  },
-  {
-    Codewars: "#AD2C2C",
-  },
-  {
-    Codepen: "#000000",
-  },
-  {
-    freeCodeCamp: "#006400",
-  },
-  {
-    GitLab: "#FC6D26",
-  },
-  {
-    Hashnode: "#2962FF",
-  },
-  {
-    "Stack Overflow": "#F48024",
-  },
-];
+export const platformColorMap: ColorMap = {
+  Github: "#1A1A1A",
+  "Frontend Mentor": "#FFFFFF",
+  Twitter: "#43B7E9",
+  LinkedIn: "#2D68FF",
+  Youtube: "#EE3939",
+  Facebook: "#2442AC",
+  Twitch: "#EE3FC8",
+  "Dev.to": "#333333",
+  Codewars: "#8A1A50",
+  Codepen: "#333333",
+  freeCodeCamp: "#302267",
+  GitLab: "#EB4925",
+  Hashnode: "#0330D1",
+  "Stack Overflow": "#EC7100",
+};
