@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-interface User {
+export interface User {
   userInfo: {
     id: number;
     name: string;
@@ -27,12 +27,10 @@ const userInfo = createSlice({
       }>
     ) => {
       state.userInfo = action.payload;
-
       localStorage.setItem("userInfo", JSON.stringify(state));
     },
-    removeCredentials: (state: User, action) => {
+    removeCredentials: (state: User) => {
       state.userInfo = null;
-
       localStorage.removeItem("userInfo");
     },
   },
