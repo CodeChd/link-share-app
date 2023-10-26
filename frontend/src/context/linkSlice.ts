@@ -4,7 +4,7 @@ export interface LinkType {
   id: number;
   image: string;
   name: string;
-  link?: string;
+  link: string;
 }
 
 const initialState: {
@@ -52,9 +52,30 @@ const link = createSlice({
       state.linkItem = updatedLinkItem;
       localStorage.setItem("userLinks", JSON.stringify(state));
     },
+    dragDrop: (
+      state,
+      action: PayloadAction<{ draggedId: number; targetId: number }>
+    ) => {
+      const { draggedId, targetId } = action.payload;
+
+      const fromIndex = state.linkItem.findIndex((x) => x.id === draggedId);
+      const toIndex = state.linkItem.findIndex((x) => x.id === targetId);
+
+      const linkItemUpdated = [...state.linkItem];
+      const [draggedLink] = linkItemUpdated.splice(fromIndex, 1);
+      linkItemUpdated.splice(toIndex, 0, draggedLink);
+
+      // Updating IDs to accommodate moved items.
+      const UpdatedLinks = linkItemUpdated.map((link, index) => ({
+        ...link,
+        id: index + 1,
+      }));
+      state.linkItem = UpdatedLinks;
+      localStorage.setItem("userLinks", JSON.stringify(state));
+    },
   },
 });
 
-export const { addLink, removeLink } = link.actions;
+export const { addLink, removeLink, dragDrop } = link.actions;
 
 export default link.reducer;

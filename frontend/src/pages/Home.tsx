@@ -1,11 +1,37 @@
 import Links from "../components/Links";
 import { useDispatch, useSelector } from "react-redux";
-import { LinkType } from "../context/linkSlice";
+import { LinkType, dragDrop } from "../context/linkSlice";
 import { addLink } from "../context/linkSlice";
 import isObjectEmpty from "../utils/isObjectEmpty";
 import { platformColorMap } from "../data/platformColorMap";
 import { platformIconLightMap } from "../data/platformIconLightMap";
+import { DndContext, closestCenter } from "@dnd-kit/core";
+import {
+  SortableContext,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
+const SortableLinks = ({ link }: { link: LinkType }) => {
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: link.id });
+
+  const styles = {
+    transition,
+    transform: CSS.Transform.toString(transform),
+  };
+  return (
+    <Links
+      key={link?.id}
+      data={link}
+      attributes={attributes}
+      listeners={listeners}
+      setNodeRef={setNodeRef}
+      style={styles}
+    />
+  );
+};
 export interface LinkState {
   link: {
     linkItem: LinkType[];
@@ -19,6 +45,17 @@ const Home = () => {
   const AddLink = () => {
     const newLink = { id: linkItem.length + 1, image: "", name: "", link: "" };
     dispatch(addLink({ ...newLink }));
+  };
+
+  const onDragEnd = (e: any) => {
+    const { active, over } = e;
+    if (active.id === over.id) {
+      return;
+    }
+    const draggedId: number = active.id;
+    const targetId: number = over.id;
+
+    dispatch(dragDrop({ draggedId, targetId }));
   };
 
   return (
@@ -44,41 +81,72 @@ const Home = () => {
             stroke="#737373"
             d="M12 55.5C12 30.923 31.923 11 56.5 11h24C86.851 11 92 16.149 92 22.5c0 8.008 6.492 14.5 14.5 14.5h95c8.008 0 14.5-6.492 14.5-14.5 0-6.351 5.149-11.5 11.5-11.5h24c24.577 0 44.5 19.923 44.5 44.5v521c0 24.577-19.923 44.5-44.5 44.5h-195C31.923 621 12 601.077 12 576.5v-521Z"
           />
-
           <circle cx="153.5" cy="112" r="48" fill="#EEE" />
           <rect width="160" height="16" x="73.5" y="185" fill="#EEE" rx="8" />
           <rect width="72" height="8" x="117.5" y="214" fill="#EEE" rx="4" />
 
-          {linkItem.map((x) => (
-            <foreignObject
-              key={x.id}
-              width="100%"
-              height="44"
-              x="0"
-              y={x.id * 60 + 215}
-              rx="4"
-            >
-              <a
-                href={x.link}
-                target="_blank"
-                className="cursor-pointer grid grid-cols-[auto_1fr_auto] gap-2 px-4 mx-8 h-[44px] rounded-md overflow-hidden items-center text-left drop-shadow-md"
-                style={{
-                  backgroundColor: !x.name ? "#EEE" : platformColorMap[x.name],
-                }}
-              >
-                <img src={platformIconLightMap[x.name]} alt={x.name} />
-                <p
-                  className={
-                    x.name === "Frontend Mentor" || !x.name
-                      ? "text-richBlack"
-                      : "text-white"
-                  }
+          <foreignObject
+            height="300"
+            rx="4"
+            x="-5"
+            y="270"
+            id="phone-container"
+            className={`${
+              linkItem.length > 5
+                ? "w-[20.20rem] desktop:w-[20.90rem]"
+                : "w-[20rem]"
+            } overflow-y-auto`}
+          >
+            <div className="flex flex-col gap-4 relative">
+              {linkItem.map((x) => (
+                <foreignObject
+                  key={x.id}
+                  width="100%"
+                  height="44"
+                  x="0"
+                  y={x.id * 60 + 215}
                 >
-                  {x.name}
-                </p>
-              </a>
-            </foreignObject>
-          ))}
+                  <a
+                    href={x.link || ""}
+                    target="_blank"
+                    className="cursor-pointer grid grid-cols-[auto_1fr_auto] gap-2 px-4 mx-8 h-[44px] rounded-md overflow-hidden items-center text-left drop-shadow-md"
+                    style={{
+                      backgroundColor: !x.name
+                        ? "#EEE"
+                        : platformColorMap[x.name],
+                    }}
+                  >
+                    <img src={platformIconLightMap[x.name]} alt={x.name} />
+                    <p
+                      className={
+                        x.name === "Frontend Mentor" || !x.name
+                          ? "text-richBlack"
+                          : "text-white"
+                      }
+                    >
+                      {x.name}
+                    </p>
+                    {x.name && (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        fill="none"
+                        viewBox="0 0 16 16"
+                      >
+                        <path
+                          fill={
+                            x.name === "Frontend Mentor" ? "#333333" : "#fff"
+                          }
+                          d="M2.667 7.333v1.334h8L7 12.333l.947.947L13.227 8l-5.28-5.28L7 3.667l3.667 3.666h-8Z"
+                        />
+                      </svg>
+                    )}
+                  </a>
+                </foreignObject>
+              ))}
+            </div>
+          </foreignObject>
         </svg>
       </div>
 
@@ -120,9 +188,22 @@ const Home = () => {
               </p>
             </div>
           ) : (
-            linkItem.map((x) => <Links key={x.id} data={x} />)
+            <DndContext
+              collisionDetection={closestCenter}
+              onDragEnd={onDragEnd}
+            >
+              <SortableContext
+                items={linkItem}
+                strategy={verticalListSortingStrategy}
+              >
+                {linkItem.map((x) => (
+                  <SortableLinks key={x.id} link={x} />
+                ))}
+              </SortableContext>
+            </DndContext>
           )}
         </div>
+
         <div className="absolute left-0 border-t-2 border-solid w-full flex justify-end p-4 px-8">
           <button
             className={`p-3 px-8 mt-4 rounded-lg ${

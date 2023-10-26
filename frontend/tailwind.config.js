@@ -5,6 +5,9 @@ export default {
     fontFamily: {
       Ins: "Instrument Sans, sans-serif",
     },
+    screens: {
+      desktop: "1920px",
+    },
     extend: {
       backgroundImage: {
         email: "url(/images/icon-email.svg)",

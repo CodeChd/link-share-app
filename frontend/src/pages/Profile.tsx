@@ -1,6 +1,6 @@
 const Profile = () => {
   return (
-    <div className="grid grid-cols-[minmax(300px,_800px)_1fr] gap-5 px-5 ">
+    <div className="grid grid-cols-[minmax(300px,_780px)_1fr] gap-5 px-5 ">
       <div
         id="left"
         className="bg-white p-[5rem] flex justify-center rounded-lg"
@@ -8,8 +8,8 @@ const Profile = () => {
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="308"
-          height="632"
+          width="305"
+          height="630"
           fill="none"
           viewBox="0 0 308 632"
         >
@@ -25,11 +25,6 @@ const Profile = () => {
           <circle cx="153.5" cy="112" r="48" fill="#EEE" />
           <rect width="160" height="16" x="73.5" y="185" fill="#EEE" rx="8" />
           <rect width="72" height="8" x="117.5" y="214" fill="#EEE" rx="4" />
-          <rect width="237" height="44" x="35" y="278" fill="#EEE" rx="8" />
-          <rect width="237" height="44" x="35" y="342" fill="#EEE" rx="8" />
-          <rect width="237" height="44" x="35" y="406" fill="#EEE" rx="8" />
-          <rect width="237" height="44" x="35" y="470" fill="#EEE" rx="8" />
-          <rect width="237" height="44" x="35" y="534" fill="#EEE" rx="8" />
         </svg>
       </div>
 
