@@ -9,23 +9,25 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import { Provider } from "react-redux";
-import store from './store.ts'
+import store from "./store.ts";
 import Home from "./pages/Home.tsx";
 import Login from "./pages/Login.tsx";
 import Register from "./pages/Register.tsx";
 import Profile from "./pages/Profile.tsx";
 import Preview from "./pages/Preview.tsx";
-
-
+import PrivateRoute from "./components/Private/PrivateRoute.tsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="" element={<App />}>
-      <Route path="/login" element={<Login />} /> 
-      <Route index={true} path="/" element={<Home />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/profile" element={<Profile />} />
-      <Route path="/preview" element={<Preview />} />
+      <Route path="/login" element={<Login />} />
+      
+      <Route path="" element={<PrivateRoute />}>
+        <Route index={true} path="/" element={<Home />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/preview" element={<Preview />} />
+      </Route>
     </Route>
   )
 );

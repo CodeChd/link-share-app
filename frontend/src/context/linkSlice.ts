@@ -53,7 +53,7 @@ const link = createSlice({
       localStorage.setItem("userLinks", JSON.stringify(state));
     },
     dragDrop: (
-      state,
+      state: { linkItem: LinkType[] },
       action: PayloadAction<{ draggedId: number; targetId: number }>
     ) => {
       const { draggedId, targetId } = action.payload;
