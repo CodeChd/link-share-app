@@ -75,10 +75,7 @@ const Links = ({
       <div className="mt-4  cursor-default">
         <p className="text-b-s block">Platform</p>
 
-        <div
-          id="platform"
-          className="relative p-4 rounded-md overflow-hidden bg-white mt-1"
-        >
+        <div className="relative p-4 rounded-md overflow-hidden bg-white mt-1">
           <legend className="absolute top-2 text-mediumGrey text-b-m">
             {data.name && data.image ? (
               <button className="flex gap-4 bg-white w-full">
@@ -131,11 +128,9 @@ const Links = ({
             ))}
           </ul>
         )}
-        <label htmlFor="link" className="text-b-s mt-4 mb-1 block">
-          Link
-        </label>
+        <p className="text-b-s mt-4 mb-1 block">Link</p>
         <input
-          id="link"
+          name="link"
           type="text"
           value={link}
           onChange={UpdateLinkHandler}

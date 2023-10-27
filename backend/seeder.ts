@@ -9,18 +9,17 @@ const ImportUser = async () => {
 
     await User.insertMany([
       {
-        name: "John",
         email: "john@gmail.com",
         password: bcrypt.hashSync("handsome123"),
       },
       {
-        name: "Cj",
         email: "cj@gmail.com",
         password: bcrypt.hashSync("handsome123"),
       },
     ]);
 
-    console.log("UserData Imported")
+    console.log("UserData Imported");
+    process.exit();
   } catch (error) {
     console.log(error);
     process.exit(1);

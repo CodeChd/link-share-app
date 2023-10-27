@@ -12,6 +12,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { Auth } from "../components/Private/PrivateRoute";
 
 const SortableLinks = ({ link }: { link: LinkType }) => {
   const { attributes, listeners, setNodeRef, transform, transition } =
@@ -40,6 +41,9 @@ export interface LinkState {
 
 const Home = () => {
   const dispatch = useDispatch();
+
+  const { userInfo } = useSelector((state: Auth) => state.auth);
+
   const { linkItem } = useSelector((state: LinkState) => state.link);
 
   const AddLink = () => {
@@ -83,7 +87,11 @@ const Home = () => {
           />
           <circle cx="153.5" cy="112" r="48" fill="#EEE" />
           <rect width="160" height="16" x="73.5" y="185" fill="#EEE" rx="8" />
-          <rect width="72" height="8" x="117.5" y="214" fill="#EEE" rx="4" />
+          <foreignObject width="100%" height="25" x="100" y="214" rx="4">
+            <p aria-label="user email" className="text-b-m">
+              {userInfo.userInfo?.email}
+            </p>
+          </foreignObject>
 
           <foreignObject
             height="300"
@@ -97,53 +105,44 @@ const Home = () => {
                 : "w-[20rem]"
             } overflow-y-auto`}
           >
-            <div className="flex flex-col gap-4 relative">
+            <div className="flex flex-col gap-[1.1rem] relative">
               {linkItem.map((x) => (
-                <foreignObject
+                <a
                   key={x.id}
-                  width="100%"
-                  height="44"
-                  x="0"
-                  y={x.id * 60 + 215}
+                  href={x.link || ""}
+                  target="_blank"
+                  className="cursor-pointer grid grid-cols-[auto_1fr_auto] gap-2 px-4 mx-8 h-[44px] rounded-md overflow-hidden items-center text-left drop-shadow-md"
+                  style={{
+                    backgroundColor: !x.name
+                      ? "#EEE"
+                      : platformColorMap[x.name],
+                  }}
                 >
-                  <a
-                    href={x.link || ""}
-                    target="_blank"
-                    className="cursor-pointer grid grid-cols-[auto_1fr_auto] gap-2 px-4 mx-8 h-[44px] rounded-md overflow-hidden items-center text-left drop-shadow-md"
-                    style={{
-                      backgroundColor: !x.name
-                        ? "#EEE"
-                        : platformColorMap[x.name],
-                    }}
+                  <img src={platformIconLightMap[x.name]} alt={x.name} />
+                  <p
+                    className={
+                      x.name === "Frontend Mentor" || !x.name
+                        ? "text-richBlack"
+                        : "text-white"
+                    }
                   >
-                    <img src={platformIconLightMap[x.name]} alt={x.name} />
-                    <p
-                      className={
-                        x.name === "Frontend Mentor" || !x.name
-                          ? "text-richBlack"
-                          : "text-white"
-                      }
+                    {x.name}
+                  </p>
+                  {x.name && (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="none"
+                      viewBox="0 0 16 16"
                     >
-                      {x.name}
-                    </p>
-                    {x.name && (
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        fill="none"
-                        viewBox="0 0 16 16"
-                      >
-                        <path
-                          fill={
-                            x.name === "Frontend Mentor" ? "#333333" : "#fff"
-                          }
-                          d="M2.667 7.333v1.334h8L7 12.333l.947.947L13.227 8l-5.28-5.28L7 3.667l3.667 3.666h-8Z"
-                        />
-                      </svg>
-                    )}
-                  </a>
-                </foreignObject>
+                      <path
+                        fill={x.name === "Frontend Mentor" ? "#333333" : "#fff"}
+                        d="M2.667 7.333v1.334h8L7 12.333l.947.947L13.227 8l-5.28-5.28L7 3.667l3.667 3.666h-8Z"
+                      />
+                    </svg>
+                  )}
+                </a>
               ))}
             </div>
           </foreignObject>

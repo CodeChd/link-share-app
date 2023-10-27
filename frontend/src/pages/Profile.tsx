@@ -1,4 +1,8 @@
+import { useSelector } from "react-redux";
+import { Auth } from "../components/Private/PrivateRoute";
+
 const Profile = () => {
+  const { userInfo } = useSelector((state: Auth) => state.auth);
   return (
     <div className="grid grid-cols-[minmax(300px,_780px)_1fr] gap-5 px-5 ">
       <div
@@ -24,7 +28,11 @@ const Profile = () => {
           />
           <circle cx="153.5" cy="112" r="48" fill="#EEE" />
           <rect width="160" height="16" x="73.5" y="185" fill="#EEE" rx="8" />
-          <rect width="72" height="8" x="117.5" y="214" fill="#EEE" rx="4" />
+          <foreignObject width="100%" height="25" x="100" y="214" rx="4">
+            <p aria-label="user email" className="text-b-m">
+              {userInfo.userInfo?.email}
+            </p>
+          </foreignObject>
         </svg>
       </div>
 
@@ -71,7 +79,7 @@ const Profile = () => {
             </p>
           </div>
 
-          <div
+          <form
             id="user-input"
             className="gap-8 bg-lightGrey/20 p-4 rounded-md w-full flex flex-col justify-between"
           >
@@ -83,6 +91,7 @@ const Profile = () => {
                 First name*
               </label>
               <input
+                id="fname"
                 type="text"
                 placeholder="e.g.Cj"
                 className="w-[85%] p-3 h-12 bg-[left_0.4rem_bottom_0.8rem] outline-none bg-[length:15px] border-solid border-2  rounded-lg focus:border focus:border-solid  focus:border-royalBlue placeholder:text-mediumGrey/50"
@@ -90,12 +99,13 @@ const Profile = () => {
             </div>
             <div id="last-name" className="flex justify-between ">
               <label
-                htmlFor="fname"
+                htmlFor="lname"
                 className="whitespace-nowrap pr-4 text-b-m text-mediumGrey"
               >
                 Last name*
               </label>
               <input
+                id="lname"
                 type="text"
                 placeholder="e.g.Francisco"
                 className="w-[85%] p-3 h-12 bg-[left_0.4rem_bottom_0.8rem] outline-none bg-[length:15px] border-solid border-2  rounded-lg focus:border focus:border-solid  focus:border-royalBlue placeholder:text-mediumGrey/50"
@@ -109,13 +119,14 @@ const Profile = () => {
                 Email
               </label>
               <input
+                autoComplete="true"
                 id="email"
                 type="email"
                 placeholder="e.g.email@example.com"
                 className="w-[85%] bg-email bg-no-repeat h-12 p-2 ps-8 bg-[left_0.4rem_bottom_0.8rem] outline-none bg-[length:15px] border-solid border-2  rounded-lg focus:border focus:border-solid  focus:border-royalBlue placeholder:text-mediumGrey/90 "
               />
             </div>
-          </div>
+          </form>
         </div>
 
         <div className="absolute left-0 border-t-2 border-solid w-full flex justify-end p-4 px-8 mt-[2.1rem] items-center">

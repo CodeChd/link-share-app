@@ -24,7 +24,7 @@ const Login = () => {
       }
       const res = await loginUser({ email, password }).unwrap();
       dispatch(setCredentials({ ...res }));
-      toast.success(`Welcome back ${res.name}!`);
+      toast.success("Successfully logged in!");
       navigate("/");
     } catch (error: any) {
       console.log(error.error);

@@ -9,14 +9,11 @@ import generateToken from "../utils/generateToken";
 //@access Public
 const loginUser = asyncHandler(async (req: Request, res: Response) => {
   const { email, password } = req.body;
-
   // Document type
   interface UserDocument extends Document {
-    name: string;
     email: string;
     matchPassword: (enteredPassword: string) => Promise<boolean>;
   }
-
   const user = (await User.findOne({ email })) as UserDocument;
 
   if (user && (await user.matchPassword(password))) {
@@ -24,7 +21,6 @@ const loginUser = asyncHandler(async (req: Request, res: Response) => {
 
     res.status(201).json({
       id: user._id,
-      name: user.name,
       email: user.email,
     });
   } else {
