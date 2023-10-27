@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import { Navigate, Outlet } from "react-router-dom";
 import { User } from "../../context/authSlice";
 
-interface Auth {
+export interface Auth {
   auth: {
     userInfo: User;
   };

@@ -28,7 +28,7 @@ const Links = ({
     dispatch(addLink({ ...platform, id: data.id, link: "" }));
   };
 
-  const UpdateLink = (e: ChangeEvent<HTMLInputElement>) => {
+  const UpdateLinkHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setLink(e.target.value);
     // Update link with link id
     dispatch(addLink({ ...data, id: data.id, link }));
@@ -138,7 +138,7 @@ const Links = ({
           id="link"
           type="text"
           value={link}
-          onChange={UpdateLink}
+          onChange={UpdateLinkHandler}
           placeholder="e.g.https://www.github.com/CodeChd"
           className=" mt-1 w-full bg-link bg-no-repeat h-12 p-2 ps-8 bg-[left_0.4rem_bottom_0.8rem] outline-none bg-[length:15px] border-solid border-2  rounded-lg focus:border focus:border-solid  focus:border-royalBlue placeholder:text-mediumGrey/90"
         />

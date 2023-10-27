@@ -1,14 +1,33 @@
 import { FormEvent, useState } from "react";
+import { useLoginUserMutation } from "../context/apiSlice";
+import { useDispatch } from "react-redux";
+import { setCredentials } from "../context/authSlice";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const Login = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<boolean>(false);
 
-  const submitHandler = (e: FormEvent<HTMLFormElement>) => {
+  const [loginUser, { isLoading }] = useLoginUserMutation();
+
+  const submitHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!email || !password) {
-      setError(true);
+
+    try {
+      if (!email || !password) {
+        setError(true);
+      }
+      const res = await loginUser({ email, password }).unwrap();
+      dispatch(setCredentials({ ...res }));
+      toast.success(`Welcome back ${res.name}!`);
+      navigate("/");
+    } catch (error: any) {
+      console.log(error.error);
     }
   };
 
@@ -88,7 +107,7 @@ const Login = () => {
           type="submit"
           className="bg-royalBlue text-white rounded-md p-3  w-full mt-5 hover:bg-lavender transition-colors ease-out disabled:bg-lavender/40 "
         >
-          Login
+          {isLoading ? "Loading..." : "Login"}
         </button>
 
         <p className="mt-4 text-center text-mediumGrey">
