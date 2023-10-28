@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { USERS_URL } from "../constants";
+import { LINKS_URL, USERS_URL } from "../constants";
 
 const apiSlice = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: "" }),
@@ -12,9 +12,16 @@ const apiSlice = createApi({
         body: data,
       }),
     }),
+    createLink: builder.mutation({
+      query: (data) => ({
+        url: LINKS_URL,
+        method: "POST",
+        body: data,
+      }),
+    }),
   }),
 });
 
-export const { useLoginUserMutation } = apiSlice;
+export const { useLoginUserMutation, useCreateLinkMutation } = apiSlice;
 
 export default apiSlice;

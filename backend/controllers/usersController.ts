@@ -14,6 +14,7 @@ const loginUser = asyncHandler(async (req: Request, res: Response) => {
     email: string;
     matchPassword: (enteredPassword: string) => Promise<boolean>;
   }
+
   const user = (await User.findOne({ email })) as UserDocument;
 
   if (user && (await user.matchPassword(password))) {

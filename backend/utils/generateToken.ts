@@ -8,8 +8,8 @@ export default function generateToken(res: Response, userId: string) {
 
   res.cookie("jwt", token, {
     httpOnly: true,
-    sameSite: "strict", 
+    sameSite: "strict",
     secure: process.env.NODE_ENV !== "development",
-    maxAge: 30 * 30 * 60 * 50 * 200,
+    maxAge: 30 * 30 * 60 * 60 * 200,
   });
 }

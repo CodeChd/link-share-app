@@ -4,7 +4,7 @@ import { LinkType, dragDrop } from "../context/linkSlice";
 import { addLink } from "../context/linkSlice";
 import isObjectEmpty from "../utils/isObjectEmpty";
 import { platformColorMap } from "../data/platformColorMap";
-import { platformIconLightMap } from "../data/platformIconLightMap";
+import { platformCustomIconMap } from "../data/platformCustomIconMap";
 import { DndContext, closestCenter } from "@dnd-kit/core";
 import {
   SortableContext,
@@ -13,6 +13,8 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Auth } from "../components/Private/PrivateRoute";
+import { useCreateLinkMutation } from "../context/apiSlice";
+import toast from "react-hot-toast";
 
 const SortableLinks = ({ link }: { link: LinkType }) => {
   const { attributes, listeners, setNodeRef, transform, transition } =
@@ -46,6 +48,8 @@ const Home = () => {
 
   const { linkItem } = useSelector((state: LinkState) => state.link);
 
+  const [saveLink, { isLoading }] = useCreateLinkMutation();
+
   const AddLink = () => {
     const newLink = { id: linkItem.length + 1, image: "", name: "", link: "" };
     dispatch(addLink({ ...newLink }));
@@ -58,12 +62,22 @@ const Home = () => {
     }
     const draggedId: number = active.id;
     const targetId: number = over.id;
-
     dispatch(dragDrop({ draggedId, targetId }));
   };
 
+  const saveLinkHandler = async () => {
+    try {
+      await saveLink({
+        linkItem,
+      }).unwrap();
+      toast.success("Links Saved!");
+    } catch (error: any) {
+      console.log(error?.error);
+    }
+  };
+
   return (
-    <div className="grid max-xl:grid-cols-[1fr_1fr] grid-cols-[minmax(300px,_780px)_1fr] gap-5 px-5 ">
+    <div className="grid max-desktop:grid-cols-[1fr_1fr] grid-cols-[780px_1fr] gap-5 px-5 ">
       <div
         id="left"
         className="bg-white p-[5rem] flex justify-center rounded-lg"
@@ -105,7 +119,7 @@ const Home = () => {
                 : "w-[20rem]"
             } overflow-y-auto`}
           >
-            <div className="flex flex-col gap-[1.1rem] relative">
+            <div className="flex flex-col gap-[0.8rem] relative">
               {linkItem.map((x) => (
                 <a
                   key={x.id}
@@ -118,7 +132,7 @@ const Home = () => {
                       : platformColorMap[x.name],
                   }}
                 >
-                  <img src={platformIconLightMap[x.name]} alt={x.name} />
+                  <img src={platformCustomIconMap[x.name]} alt={x.name} />
                   <p
                     className={
                       x.name === "Frontend Mentor" || !x.name
@@ -205,11 +219,12 @@ const Home = () => {
 
         <div className="absolute left-0 border-t-2 border-solid w-full flex justify-end p-4 px-8">
           <button
+            onClick={saveLinkHandler}
             className={`p-3 px-8 mt-4 rounded-lg ${
               isObjectEmpty(linkItem) ? "bg-lavender " : "bg-royalBlue"
             } text-white`}
           >
-            Save
+            {isLoading ? "Loading" : "Save"}
           </button>
         </div>
       </div>

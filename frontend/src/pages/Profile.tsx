@@ -4,7 +4,7 @@ import { Auth } from "../components/Private/PrivateRoute";
 const Profile = () => {
   const { userInfo } = useSelector((state: Auth) => state.auth);
   return (
-    <div className="grid grid-cols-[minmax(300px,_780px)_1fr] gap-5 px-5 ">
+    <div className="grid max-desktop:grid-cols-[1fr_1fr] grid-cols-[780px_1fr] gap-5 px-5 ">
       <div
         id="left"
         className="bg-white p-[5rem] flex justify-center rounded-lg"
