@@ -1,4 +1,3 @@
-import Links from "../components/Links";
 import { useDispatch, useSelector } from "react-redux";
 import { LinkType, dragDrop } from "../context/linkSlice";
 import { addLink } from "../context/linkSlice";
@@ -8,49 +7,20 @@ import { platformCustomIconMap } from "../data/platformCustomIconMap";
 import { DndContext, closestCenter } from "@dnd-kit/core";
 import {
   SortableContext,
-  useSortable,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
 import { Auth } from "../components/Private/PrivateRoute";
 import { useCreateLinkMutation, useGetLinksQuery } from "../context/apiSlice";
 import toast from "react-hot-toast";
 import { LINKS_URL } from "../constants";
 import { useEffect } from "react";
+import SortableLinks from "../components/SortableLinks";
 
-const SortableLinks = ({ link }: { link: LinkType }) => {
-  const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({
-      id: link.id,
-      transition: {
-        duration: 600,
-        easing: "cubic-bezier(0.25, 1, 0.5, 1)",
-      },
-    });
-
-  const styles = {
-    transition,
-    transform: CSS.Transform.toString(transform),
-  };
-  return (
-    <Links
-      key={link?.id}
-      data={link}
-      attributes={attributes}
-      listeners={listeners}
-      setNodeRef={setNodeRef}
-      style={styles}
-    />
-  );
-};
 export interface LinkState {
   link: {
     linkItem: LinkType[];
   };
 }
-
-// linkItem.map((x) => <SortableLinks key={x.id} link={x} />)
-
 const Home = () => {
   const dispatch = useDispatch();
 
