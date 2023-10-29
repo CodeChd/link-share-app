@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface LinkType {
+  _id?: number;
   id: number;
   image: string;
   name: string;

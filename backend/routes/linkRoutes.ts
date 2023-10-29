@@ -1,9 +1,9 @@
-import express from "express";
-import { saveLinks } from "../controllers/linksController";
+import { Request, Response, Router } from "express";
+import { getLinks, saveLinks } from "../controllers/linksController";
 import { authUser } from "../middleware/authHandler";
 
-const router = express.Router();
+const router = Router();
 
-router.route("/").post(authUser, saveLinks);
+router.route("/").get(authUser, getLinks).post(authUser, saveLinks);
 
 export default router;

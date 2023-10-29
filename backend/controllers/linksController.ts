@@ -3,23 +3,23 @@ import asyncHandler from "../middleware/asyncHandler";
 import Link from "../models/linkModel";
 import User from "../models/userModel";
 
-//@desc Save links to db
-//@routes POST /api/links
-//@access Private
 interface CustomRequest extends Request {
   user?: any;
 }
+
+//@desc Save links to db
+//@routes POST /api/links
+//@access Private
 const saveLinks = asyncHandler(async (req: CustomRequest, res: Response) => {
   const { linkItem } = req.body;
-
-  const user = await User.findById(req.user._id);
-
   interface LinkType {
     id: number;
     image: string;
     name: string;
     link: string;
   }
+
+  const user = await User.findById(req.user._id);
 
   if (user) {
     const saveLinkItems = new Link({
@@ -39,4 +39,18 @@ const saveLinks = asyncHandler(async (req: CustomRequest, res: Response) => {
   }
 });
 
-export { saveLinks };
+//@desc Fetch all links
+//@routes GET /api/links
+//@access Private
+const getLinks = asyncHandler(async (req: CustomRequest, res: Response) => {
+  const userLink = await Link.find({ user: req.user._id });
+
+  if (userLink) {
+    res.status(200).json(userLink);
+  } else {
+    res.status(404);
+    throw new Error("Links not found!");
+  }
+});
+
+export { saveLinks, getLinks };

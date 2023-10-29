@@ -13,12 +13,20 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Auth } from "../components/Private/PrivateRoute";
-import { useCreateLinkMutation } from "../context/apiSlice";
+import { useCreateLinkMutation, useGetLinksQuery } from "../context/apiSlice";
 import toast from "react-hot-toast";
+import { LINKS_URL } from "../constants";
+import { useEffect } from "react";
 
 const SortableLinks = ({ link }: { link: LinkType }) => {
   const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id: link.id });
+    useSortable({
+      id: link.id,
+      transition: {
+        duration: 600,
+        easing: "cubic-bezier(0.25, 1, 0.5, 1)",
+      },
+    });
 
   const styles = {
     transition,
@@ -41,6 +49,8 @@ export interface LinkState {
   };
 }
 
+// linkItem.map((x) => <SortableLinks key={x.id} link={x} />)
+
 const Home = () => {
   const dispatch = useDispatch();
 
@@ -48,7 +58,22 @@ const Home = () => {
 
   const { linkItem } = useSelector((state: LinkState) => state.link);
 
+  const { data, isLoading: loadingLinks } = useGetLinksQuery(LINKS_URL);
+
   const [saveLink, { isLoading }] = useCreateLinkMutation();
+
+  useEffect(() => {
+    if (data) {
+      const dbLinks = data[0].linkItems.map((x: LinkType, index: number) => ({
+        ...x,
+        id: index + 1,
+      }));
+
+      dbLinks.forEach((link: LinkType) => {
+        dispatch(addLink(link));
+      });
+    }
+  }, [data, dispatch, loadingLinks]);
 
   const AddLink = () => {
     const newLink = { id: linkItem.length + 1, image: "", name: "", link: "" };
@@ -200,6 +225,8 @@ const Home = () => {
                 you share your profiles with everyone!
               </p>
             </div>
+          ) : loadingLinks ? (
+            "Loading"
           ) : (
             <DndContext
               collisionDetection={closestCenter}
@@ -209,7 +236,7 @@ const Home = () => {
                 items={linkItem}
                 strategy={verticalListSortingStrategy}
               >
-                {linkItem.map((x) => (
+                {linkItem.map((x: LinkType) => (
                   <SortableLinks key={x.id} link={x} />
                 ))}
               </SortableContext>

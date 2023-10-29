@@ -19,9 +19,16 @@ const apiSlice = createApi({
         body: data,
       }),
     }),
+    getLinks: builder.query({
+      query: (data) => ({
+        url: data,
+      }),
+      keepUnusedDataFor: 5,
+    }),
   }),
 });
 
-export const { useLoginUserMutation, useCreateLinkMutation } = apiSlice;
+export const { useLoginUserMutation, useCreateLinkMutation, useGetLinksQuery } =
+  apiSlice;
 
 export default apiSlice;
