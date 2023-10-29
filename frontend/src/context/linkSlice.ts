@@ -32,6 +32,7 @@ const link = createSlice({
         );
       } else {
         state.linkItem = [...state.linkItem, link];
+
         //Updating IDs to accommodate removed items.
         state.linkItem = state.linkItem.map((link, index) => ({
           ...link,

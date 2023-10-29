@@ -14,5 +14,6 @@ module.exports = {
     "react-props/types": "off",
     "no-unused-vars": "warn",
     "@typescript-eslint/no-explicit-any": "off",
+    "react-hooks/exhaustive-deps": "off",
   },
 };

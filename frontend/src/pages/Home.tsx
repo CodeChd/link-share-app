@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { LinkType, dragDrop } from "../context/linkSlice";
+import { LinkType, dragDrop, removeLink } from "../context/linkSlice";
 import { addLink } from "../context/linkSlice";
 import isObjectEmpty from "../utils/isObjectEmpty";
 import { platformColorMap } from "../data/platformColorMap";
@@ -30,25 +30,43 @@ const Home = () => {
 
   const { data, isLoading: loadingLinks } = useGetLinksQuery(LINKS_URL);
 
+  console.log(data);
   const [saveLink, { isLoading }] = useCreateLinkMutation();
-
-  useEffect(() => {
-    if (data) {
-      const dbLinks = data[0].linkItems.map((x: LinkType, index: number) => ({
-        ...x,
-        id: index + 1,
-      }));
-
-      dbLinks.forEach((link: LinkType) => {
-        dispatch(addLink(link));
-      });
-    }
-  }, [data, dispatch, loadingLinks]);
 
   const AddLink = () => {
     const newLink = { id: linkItem.length + 1, image: "", name: "", link: "" };
     dispatch(addLink({ ...newLink }));
   };
+
+  //Loading links logic
+  useEffect(() => {
+    if (data) {
+      const updatedLink = data[0]?.linkItems.map(
+        (x: LinkType, index: number) => ({
+          ...x,
+          id: index + 1,
+        })
+      );
+
+      updatedLink.forEach((link: LinkType) => {
+        const existingLink = linkItem.find((x) => x._id === link._id);
+        if (!existingLink) {
+          dispatch(addLink(link));
+        }
+      });
+    }
+
+    return () => {
+      if (data) {
+        data[0].linkItems.forEach((link: LinkType) => {
+          const existingLink = linkItem.find((x) => x._id === link._id);
+          if (existingLink) {
+            dispatch(removeLink(link._id as number));
+          }
+        });
+      }
+    };
+  }, []);
 
   const onDragEnd = (e: any) => {
     const { active, over } = e;
@@ -179,7 +197,7 @@ const Home = () => {
           id="links"
           className="h-[30rem] overflow-y-auto flex flex-col gap-5 justify-start items-center px-[2rem] mb-4"
         >
-          {isObjectEmpty(linkItem) ? (
+          {isObjectEmpty(linkItem) && linkItem.length === 0 ? (
             <div className="text-center bg-lightGrey/20 w-full h-full flex flex-col justify-center mb-2 rounded-lg">
               <img
                 src="/images/illustration-empty.svg"

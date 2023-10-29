@@ -43,7 +43,7 @@ const saveLinks = asyncHandler(async (req: CustomRequest, res: Response) => {
 //@routes GET /api/links
 //@access Private
 const getLinks = asyncHandler(async (req: CustomRequest, res: Response) => {
-  const userLink = await Link.find({ user: req.user._id });
+  const userLink = await Link.findById("653e29c77da4cceec1135a12");
 
   if (userLink) {
     res.status(200).json(userLink);
