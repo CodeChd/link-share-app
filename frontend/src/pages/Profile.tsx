@@ -1,7 +1,13 @@
 import { useSelector } from "react-redux";
 import { Auth } from "../components/Private/PrivateRoute";
+import { useGetLinksQuery } from "../context/apiSlice";
+import { LINKS_URL } from "../constants";
+import { platformColorMap } from "../data/platformColorMap";
+import { platformCustomIconMap } from "../data/platformCustomIconMap";
 
 const Profile = () => {
+  const { data, isLoading: loadingLinks } = useGetLinksQuery(LINKS_URL);
+
   const { userInfo } = useSelector((state: Auth) => state.auth);
   return (
     <div className="grid max-desktop:grid-cols-[1fr_1fr] grid-cols-[780px_1fr] gap-5 px-5 ">
@@ -33,6 +39,66 @@ const Profile = () => {
               {userInfo.userInfo?.email}
             </p>
           </foreignObject>
+
+          {loadingLinks ? (
+            "Loading"
+          ) : (
+            <foreignObject
+              height="300"
+              rx="4"
+              x="-5"
+              y="270"
+              id="phone-container"
+              className={`${
+                data?.linkItems.length > 5
+                  ? "w-[20.20rem] desktop:w-[20.90rem]"
+                  : "w-[20rem]"
+              } overflow-y-auto`}
+            >
+              <div className="flex flex-col gap-[0.8rem] relative">
+                {data?.linkItems.map((x) => (
+                  <a
+                    key={x.id}
+                    href={x.link || ""}
+                    target="_blank"
+                    className="cursor-pointer grid grid-cols-[auto_1fr_auto] gap-2 px-4 mx-8 h-[44px] rounded-md overflow-hidden items-center text-left drop-shadow-md"
+                    style={{
+                      backgroundColor: !x.name
+                        ? "#EEE"
+                        : platformColorMap[x.name],
+                    }}
+                  >
+                    <img src={platformCustomIconMap[x.name]} alt={x.name} />
+                    <p
+                      className={
+                        x.name === "Frontend Mentor" || !x.name
+                          ? "text-richBlack"
+                          : "text-white"
+                      }
+                    >
+                      {x.name}
+                    </p>
+                    {x.name && (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        fill="none"
+                        viewBox="0 0 16 16"
+                      >
+                        <path
+                          fill={
+                            x.name === "Frontend Mentor" ? "#333333" : "#fff"
+                          }
+                          d="M2.667 7.333v1.334h8L7 12.333l.947.947L13.227 8l-5.28-5.28L7 3.667l3.667 3.666h-8Z"
+                        />
+                      </svg>
+                    )}
+                  </a>
+                ))}
+              </div>
+            </foreignObject>
+          )}
         </svg>
       </div>
 
@@ -47,11 +113,11 @@ const Profile = () => {
         </div>
 
         <div
-          id="user-image"
+          aria-label="user-image"
           className="overflow-hidden w-full flex flex-col gap-8 justify-center items-center my-6 rounded-md "
         >
           <div
-            id="upload-image"
+            aria-label="upload-image"
             className="grid grid-cols-[2fr_1fr_1fr] place-items-center gap-4 bg-lightGrey/20 p-4 rounded-mdx "
           >
             <div className="w-full">
@@ -80,7 +146,7 @@ const Profile = () => {
           </div>
 
           <form
-            id="user-input"
+            aria-label="user-input"
             className="gap-8 bg-lightGrey/20 p-4 rounded-md w-full flex flex-col justify-between"
           >
             <div id="first-name" className="flex justify-between">
