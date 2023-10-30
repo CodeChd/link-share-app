@@ -7,7 +7,7 @@ function App() {
 
   return (
     <>
-      <Toaster position="bottom-right" />
+      <Toaster position="bottom-center" />
       {pathname !== "/login" &&
         pathname !== "/register" &&
         pathname !== "/preview" && <Header />}

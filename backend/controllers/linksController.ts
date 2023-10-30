@@ -55,9 +55,11 @@ const getLinks = asyncHandler(async (req: CustomRequest, res: Response) => {
 
   if (userLink) {
     res.status(200).json(userLink);
+  } else if (!userLink) {
+    res.status(200).json({ linkItems: [] });
   } else {
-    res.status(404);
-    throw new Error("Links not found!");
+    res.status(400);
+    throw new Error("Invalid resource");
   }
 });
 

@@ -28,7 +28,11 @@ const Home = () => {
 
   const { linkItem } = useSelector((state: LinkState) => state.link);
 
-  const { data, isLoading: loadingLinks } = useGetLinksQuery(LINKS_URL);
+  const {
+    data,
+    isLoading: loadingLinks,
+    isError,
+  } = useGetLinksQuery(LINKS_URL);
 
   const [saveLink, { isLoading }] = useCreateLinkMutation();
 
@@ -40,7 +44,7 @@ const Home = () => {
   //Loading links logic
   useEffect(() => {
     if (data) {
-      const updatedLink = data.linkItems.map((x: LinkType, index: number) => ({
+      const updatedLink = data?.linkItems.map((x: LinkType, index: number) => ({
         ...x,
         id: index + 1,
       }));
@@ -55,7 +59,7 @@ const Home = () => {
 
     return () => {
       if (data) {
-        data.linkItems.forEach((link: LinkType) => {
+        data?.linkItems.forEach((link: LinkType) => {
           const existingLink = linkItem.find((x) => x._id === link._id);
           if (existingLink) {
             dispatch(removeLink(link._id as number));
@@ -80,9 +84,10 @@ const Home = () => {
       await saveLink({
         linkItem,
       }).unwrap();
-      toast.success("Links Saved!");
+      toast.success("Your changes have been successfully changed!");
     } catch (error: any) {
-      console.log(error?.error);
+      console.log(error.error);
+      toast.error("Something's wrong!");
     }
   };
 
@@ -194,7 +199,7 @@ const Home = () => {
           id="links"
           className="h-[30rem] overflow-y-auto flex flex-col gap-5 justify-start items-center px-[2rem] mb-4"
         >
-          {isObjectEmpty(linkItem) && linkItem.length === 0 ? (
+          {isObjectEmpty(linkItem) || linkItem.length === 0 || isError ? (
             <div className="text-center bg-lightGrey/20 w-full h-full flex flex-col justify-center mb-2 rounded-lg">
               <img
                 src="/images/illustration-empty.svg"
@@ -231,9 +236,12 @@ const Home = () => {
 
         <div className="absolute left-0 border-t-2 border-solid w-full flex justify-end p-4 px-8">
           <button
+            disabled={isObjectEmpty(linkItem) && data?.linkItems.length === 0}
             onClick={saveLinkHandler}
-            className={`p-3 px-8 mt-4 rounded-lg ${
-              isObjectEmpty(linkItem) ? "bg-lavender " : "bg-royalBlue"
+            className={`p-3 px-8 mt-4 disabled:cursor-not-allowed rounded-lg ${
+              isObjectEmpty(linkItem) && data?.linkItems.length === 0
+                ? "bg-lavender "
+                : "bg-royalBlue "
             } text-white`}
           >
             {isLoading ? "Loading" : "Save"}
