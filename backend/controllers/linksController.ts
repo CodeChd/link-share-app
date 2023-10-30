@@ -6,44 +6,52 @@ import User from "../models/userModel";
 interface CustomRequest extends Request {
   user?: any;
 }
-
 //@desc Save links to db
 //@routes POST /api/links
 //@access Private
 const saveLinks = asyncHandler(async (req: CustomRequest, res: Response) => {
   const { linkItem } = req.body;
+  const user = await User.findById(req.user._id);
+
   interface LinkType {
-    id: number;
     image: string;
     name: string;
     link: string;
   }
 
-  const user = await User.findById(req.user._id);
-
-  if (user) {
-    const saveLinkItems = new Link({
-      user: user._id,
-      linkItems: linkItem.map((x: LinkType) => ({
-        name: x.name,
-        image: x.image,
-        link: x.link,
-      })),
-    });
-
-    const newLinks = await saveLinkItems.save();
-    res.status(201).json(newLinks);
-  } else {
+  if (!user) {
     res.status(400);
     throw new Error("Invalid resource");
   }
+
+  let link = await Link.findOne({ user: req.user._id });
+
+  if (!link) {
+    link = new Link({
+      user: user._id,
+      linkItems: linkItem.map((x: LinkType) => ({
+        name: x.name,
+        link: x.link,
+        image: x.image,
+      })),
+    });
+  } else {
+    link.linkItems = linkItem.map((x: LinkType) => ({
+      name: x.name,
+      link: x.link,
+      image: x.image,
+    }));
+  }
+
+  const newLinks = await link.save();
+  res.status(201).json(newLinks);
 });
 
-//@desc Fetch all links
+//@desc Fetch a user links
 //@routes GET /api/links
 //@access Private
 const getLinks = asyncHandler(async (req: CustomRequest, res: Response) => {
-  const userLink = await Link.findById("653e29c77da4cceec1135a12");
+  const userLink = await Link.findOne({ user: req.user._id });
 
   if (userLink) {
     res.status(200).json(userLink);

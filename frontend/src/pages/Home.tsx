@@ -12,9 +12,9 @@ import {
 import { Auth } from "../components/Private/PrivateRoute";
 import { useCreateLinkMutation, useGetLinksQuery } from "../context/apiSlice";
 import toast from "react-hot-toast";
-import { LINKS_URL } from "../constants";
 import { useEffect } from "react";
 import SortableLinks from "../components/SortableLinks";
+import { LINKS_URL } from "../constants";
 
 export interface LinkState {
   link: {
@@ -30,7 +30,6 @@ const Home = () => {
 
   const { data, isLoading: loadingLinks } = useGetLinksQuery(LINKS_URL);
 
-  console.log(data);
   const [saveLink, { isLoading }] = useCreateLinkMutation();
 
   const AddLink = () => {
@@ -41,12 +40,10 @@ const Home = () => {
   //Loading links logic
   useEffect(() => {
     if (data) {
-      const updatedLink = data[0]?.linkItems.map(
-        (x: LinkType, index: number) => ({
-          ...x,
-          id: index + 1,
-        })
-      );
+      const updatedLink = data.linkItems.map((x: LinkType, index: number) => ({
+        ...x,
+        id: index + 1,
+      }));
 
       updatedLink.forEach((link: LinkType) => {
         const existingLink = linkItem.find((x) => x._id === link._id);
@@ -58,7 +55,7 @@ const Home = () => {
 
     return () => {
       if (data) {
-        data[0].linkItems.forEach((link: LinkType) => {
+        data.linkItems.forEach((link: LinkType) => {
           const existingLink = linkItem.find((x) => x._id === link._id);
           if (existingLink) {
             dispatch(removeLink(link._id as number));
@@ -66,7 +63,7 @@ const Home = () => {
         });
       }
     };
-  }, []);
+  }, [data]);
 
   const onDragEnd = (e: any) => {
     const { active, over } = e;
