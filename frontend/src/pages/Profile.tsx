@@ -1,14 +1,56 @@
-import { useSelector } from "react-redux";
-import { Auth } from "../components/Private/PrivateRoute";
-import { useGetLinksQuery } from "../context/apiSlice";
+import { useDispatch } from "react-redux";
+import {
+  useGetLinksQuery,
+  useGetUserProfileQuery,
+  useUpdateProfileMutation,
+} from "../context/apiSlice";
 import { LINKS_URL } from "../constants";
 import { platformColorMap } from "../data/platformColorMap";
 import { platformCustomIconMap } from "../data/platformCustomIconMap";
+import { FormEvent, useState, useEffect } from "react";
+import { LinkType } from "../context/linkSlice";
+import { setCredentials } from "../context/authSlice";
+import toast from "react-hot-toast";
 
 const Profile = () => {
+  const dispatch = useDispatch();
   const { data, isLoading: loadingLinks } = useGetLinksQuery(LINKS_URL);
+  const [updateProfile, { isLoading: loadingUpdate }] =
+    useUpdateProfileMutation();
+  const { data: userFullName, isLoading: loadingUser } =
+    useGetUserProfileQuery("info");
 
-  const { userInfo } = useSelector((state: Auth) => state.auth);
+  const [fname, setFname] = useState<string>("");
+  const [lname, setLname] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+
+  useEffect(() => {
+    if (!loadingUser) {
+      setFname(userFullName.firstName);
+      setLname(userFullName.lastName);
+      setEmail(userFullName.email);
+    }
+  }, [userFullName, loadingUser]);
+
+  const submitHandler = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const res = await updateProfile({
+        firstName: fname,
+        lastName: lname,
+        email,
+      }).unwrap();
+      dispatch(setCredentials({ ...res }));
+      toast.custom(
+        <div className="bg-richBlack text-snow flex gap-4 p-4 rounded-xl">
+          <img src="/images/icon-changes-saved.svg" alt="saved-icon" /> Your
+          changes have been successfully saved!
+        </div>
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="grid max-desktop:grid-cols-[1fr_1fr] grid-cols-[780px_1fr] gap-5 px-5 ">
       <div
@@ -36,7 +78,7 @@ const Profile = () => {
           <rect width="160" height="16" x="73.5" y="185" fill="#EEE" rx="8" />
           <foreignObject width="100%" height="25" x="100" y="214" rx="4">
             <p aria-label="user email" className="text-b-m">
-              {userInfo.userInfo?.email}
+              {email}
             </p>
           </foreignObject>
 
@@ -56,9 +98,9 @@ const Profile = () => {
               } overflow-y-auto`}
             >
               <div className="flex flex-col gap-[0.8rem] relative">
-                {data?.linkItems.map((x) => (
+                {data?.linkItems.map((x: LinkType) => (
                   <a
-                    key={x.id}
+                    key={x._id}
                     href={x.link || ""}
                     target="_blank"
                     className="cursor-pointer grid grid-cols-[auto_1fr_auto] gap-2 px-4 mx-8 h-[44px] rounded-md overflow-hidden items-center text-left drop-shadow-md"
@@ -113,7 +155,7 @@ const Profile = () => {
         </div>
 
         <div
-          aria-label="user-image"
+          aria-label="user-info"
           className="overflow-hidden w-full flex flex-col gap-8 justify-center items-center my-6 rounded-md "
         >
           <div
@@ -146,6 +188,7 @@ const Profile = () => {
           </div>
 
           <form
+            onSubmit={submitHandler}
             aria-label="user-input"
             className="gap-8 bg-lightGrey/20 p-4 rounded-md w-full flex flex-col justify-between"
           >
@@ -159,8 +202,10 @@ const Profile = () => {
               <input
                 id="fname"
                 type="text"
+                value={fname}
+                onChange={(e) => setFname(e.target.value)}
                 placeholder="e.g.Cj"
-                className="w-[85%] p-3 h-12 bg-[left_0.4rem_bottom_0.8rem] outline-none bg-[length:15px] border-solid border-2  rounded-lg focus:border focus:border-solid  focus:border-royalBlue placeholder:text-mediumGrey/50"
+                className="w-[85%] p-3 h-12 bg-[left_0.4rem_bottom_0.8rem] outline-none bg-[length:15px] border-solid border-2  rounded-lg focus:border focus:border-solid  focus:border-royalBlue  focus:drop-shadow-input placeholder:text-mediumGrey/50"
               />
             </div>
             <div id="last-name" className="flex justify-between ">
@@ -173,8 +218,10 @@ const Profile = () => {
               <input
                 id="lname"
                 type="text"
+                value={lname}
+                onChange={(e) => setLname(e.target.value)}
                 placeholder="e.g.Francisco"
-                className="w-[85%] p-3 h-12 bg-[left_0.4rem_bottom_0.8rem] outline-none bg-[length:15px] border-solid border-2  rounded-lg focus:border focus:border-solid  focus:border-royalBlue placeholder:text-mediumGrey/50"
+                className="w-[85%] p-3 h-12 bg-[left_0.4rem_bottom_0.8rem] outline-none bg-[length:15px] border-solid border-2  rounded-lg focus:border focus:border-solid  focus:border-royalBlue  focus:drop-shadow-input placeholder:text-mediumGrey/50"
               />
             </div>
             <div id="Email" className="flex justify-between ">
@@ -188,17 +235,21 @@ const Profile = () => {
                 autoComplete="true"
                 id="email"
                 type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="e.g.email@example.com"
-                className="w-[85%] bg-email bg-no-repeat h-12 p-2 ps-8 bg-[left_0.4rem_bottom_0.8rem] outline-none bg-[length:15px] border-solid border-2  rounded-lg focus:border focus:border-solid  focus:border-royalBlue placeholder:text-mediumGrey/90 "
+                className="w-[85%] bg-email bg-no-repeat h-12 p-2 ps-8 bg-[left_0.4rem_bottom_0.8rem] outline-none bg-[length:15px] border-solid border-2  rounded-lg focus:border focus:border-solid  focus:border-royalBlue  focus:drop-shadow-input placeholder:text-mediumGrey/90 "
               />
             </div>
+            <div className="absolute left-0 bottom-0 border-t-2 border-solid w-full flex justify-end p-4 px-8 mt-[2.1rem] items-center">
+              <button
+                type="submit"
+                className="p-3 px-8 mt-4 rounded-lg bg-lavender text-white"
+              >
+                {loadingUpdate ? "Loading" : "Save"}
+              </button>
+            </div>
           </form>
-        </div>
-
-        <div className="absolute left-0 border-t-2 border-solid w-full flex justify-end p-4 px-8 mt-[2.1rem] items-center">
-          <button className="p-3 px-8 mt-4 rounded-lg bg-lavender text-white">
-            Save
-          </button>
         </div>
       </div>
     </div>

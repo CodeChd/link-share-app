@@ -9,8 +9,11 @@ import {
   SortableContext,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import { Auth } from "../components/Private/PrivateRoute";
-import { useCreateLinkMutation, useGetLinksQuery } from "../context/apiSlice";
+import {
+  useCreateLinkMutation,
+  useGetLinksQuery,
+  useGetUserProfileQuery,
+} from "../context/apiSlice";
 import toast from "react-hot-toast";
 import { useEffect } from "react";
 import SortableLinks from "../components/SortableLinks";
@@ -23,8 +26,8 @@ export interface LinkState {
 }
 const Home = () => {
   const dispatch = useDispatch();
-
-  const { userInfo } = useSelector((state: Auth) => state.auth);
+  const { data: userFullName, isLoading: loadingUser } =
+    useGetUserProfileQuery("info");
 
   const { linkItem } = useSelector((state: LinkState) => state.link);
 
@@ -84,7 +87,12 @@ const Home = () => {
       await saveLink({
         linkItem,
       }).unwrap();
-      toast.success("Your changes have been successfully changed!");
+      toast.custom(
+        <div className="bg-richBlack text-snow flex gap-4 p-4 rounded-xl">
+          <img src="/images/icon-changes-saved.svg" alt="saved-icon" /> Your
+          changes have been successfully saved!
+        </div>
+      );
     } catch (error: any) {
       console.log(error.error);
       toast.error("Something's wrong!");
@@ -118,7 +126,7 @@ const Home = () => {
           <rect width="160" height="16" x="73.5" y="185" fill="#EEE" rx="8" />
           <foreignObject width="100%" height="25" x="100" y="214" rx="4">
             <p aria-label="user email" className="text-b-m">
-              {userInfo.userInfo?.email}
+              {loadingUser ? "Loading" : userFullName.email}
             </p>
           </foreignObject>
 

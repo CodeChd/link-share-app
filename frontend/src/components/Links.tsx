@@ -75,10 +75,10 @@ const Links = ({
       <div className="mt-4  cursor-default">
         <p className="text-b-s block">Platform</p>
 
-        <div className="relative p-4 rounded-md overflow-hidden bg-white mt-1">
+        <div className="relative p-4 rounded-md overflow-hidden bg-white mt-1 ">
           <legend className="absolute top-2 text-mediumGrey text-b-m">
             {data.name && data.image ? (
-              <button className="flex gap-4 bg-white w-full">
+              <button className="flex gap-4 w-full">
                 <img
                   src={data.image}
                   alt={data.name}
@@ -103,7 +103,9 @@ const Links = ({
           </svg>
 
           <button
-            className=" absolute inset-0 w-full"
+            className={`absolute inset-0 p-2 w-full overflow-hidden rounded-md ${
+              isClicked && "border border-solid  border-royalBlue "
+            }`}
             onClick={IsClicked}
           ></button>
         </div>
@@ -135,7 +137,7 @@ const Links = ({
           value={link}
           onChange={UpdateLinkHandler}
           placeholder="e.g.https://www.github.com/CodeChd"
-          className=" mt-1 w-full bg-link bg-no-repeat h-12 p-2 ps-8 bg-[left_0.4rem_bottom_0.8rem] outline-none bg-[length:15px] border-solid border-2  rounded-lg focus:border focus:border-solid  focus:border-royalBlue placeholder:text-mediumGrey/90"
+          className=" mt-1 w-full bg-link bg-no-repeat h-12 p-2 ps-8 bg-[left_0.4rem_bottom_0.8rem] outline-none bg-[length:15px] border-solid border-2  rounded-lg focus:border focus:border-solid  focus:border-royalBlue focus:drop-shadow-input placeholder:text-mediumGrey/90"
         />
       </div>
     </div>

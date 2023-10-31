@@ -12,6 +12,19 @@ const apiSlice = createApi({
         body: data,
       }),
     }),
+    updateProfile: builder.mutation({
+      query: (data) => ({
+        url: `${USERS_URL}/profile`,
+        method: "PUT",
+        body: data,
+      }),
+    }),
+    getUserProfile: builder.query({
+      query: (data) => ({
+        url: `${USERS_URL}/${data}`,
+      }),
+      keepUnusedDataFor: 5,
+    }),
     createLink: builder.mutation({
       query: (data) => ({
         url: LINKS_URL,
@@ -28,7 +41,12 @@ const apiSlice = createApi({
   }),
 });
 
-export const { useLoginUserMutation, useCreateLinkMutation, useGetLinksQuery } =
-  apiSlice;
+export const {
+  useLoginUserMutation,
+  useCreateLinkMutation,
+  useGetLinksQuery,
+  useUpdateProfileMutation,
+  useGetUserProfileQuery,
+} = apiSlice;
 
 export default apiSlice;

@@ -23,8 +23,8 @@ const Login = () => {
         setError(true);
       }
       const res = await loginUser({ email, password }).unwrap();
-      dispatch(setCredentials({ ...res }));
-      toast.success("Successfully logged in!");
+      dispatch(setCredentials({ isloggedIn: Boolean(res.isloggedIn) }));
+      toast.success(res.message);
       navigate("/");
     } catch (error: any) {
       console.log(error.error);

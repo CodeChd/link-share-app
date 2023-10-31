@@ -2,10 +2,11 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 export interface User {
   userInfo: {
+    isloggedIn: boolean;
     firstName?: string;
     lastName?: string;
-    id: number;
-    email: string;
+    id?: number;
+    email?: string;
   } | null;
 }
 
@@ -22,8 +23,7 @@ const userSlice = createSlice({
     setCredentials: (
       state: User,
       action: PayloadAction<{
-        id: number;
-        email: string;
+        isloggedIn: boolean;
       }>
     ) => {
       state.userInfo = action.payload;
