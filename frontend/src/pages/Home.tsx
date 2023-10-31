@@ -15,7 +15,7 @@ import {
   useGetUserProfileQuery,
 } from "../context/apiSlice";
 import toast from "react-hot-toast";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import SortableLinks from "../components/SortableLinks";
 import { LINKS_URL } from "../constants";
 
@@ -26,8 +26,15 @@ export interface LinkState {
 }
 const Home = () => {
   const dispatch = useDispatch();
-  const { data: userFullName, isLoading: loadingUser } =
-    useGetUserProfileQuery("info");
+  const {
+    data: userFullName,
+    isLoading: loadingUser,
+    refetch: refetchUserDetails,
+  } = useGetUserProfileQuery("info");
+
+  const [fname, setFname] = useState<string>("");
+  const [lname, setLname] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
 
   const { linkItem } = useSelector((state: LinkState) => state.link);
 
@@ -35,14 +42,20 @@ const Home = () => {
     data,
     isLoading: loadingLinks,
     isError,
+    refetch: refetchLinks,
   } = useGetLinksQuery(LINKS_URL);
 
   const [saveLink, { isLoading }] = useCreateLinkMutation();
 
-  const AddLink = () => {
-    const newLink = { id: linkItem.length + 1, image: "", name: "", link: "" };
-    dispatch(addLink({ ...newLink }));
-  };
+  //Loading user credential
+  useEffect(() => {
+    if (!loadingUser) {
+      setFname(userFullName.firstName);
+      setLname(userFullName.lastName);
+      setEmail(userFullName.email);
+      refetchUserDetails();
+    }
+  }, [userFullName, loadingUser]);
 
   //Loading links logic
   useEffect(() => {
@@ -72,6 +85,11 @@ const Home = () => {
     };
   }, [data]);
 
+  const AddLink = () => {
+    const newLink = { id: linkItem.length + 1, image: "", name: "", link: "" };
+    dispatch(addLink({ ...newLink }));
+  };
+
   const onDragEnd = (e: any) => {
     const { active, over } = e;
     if (active.id === over.id) {
@@ -93,6 +111,7 @@ const Home = () => {
           changes have been successfully saved!
         </div>
       );
+      refetchLinks();
     } catch (error: any) {
       console.log(error.error);
       toast.error("Something's wrong!");
@@ -123,10 +142,24 @@ const Home = () => {
             d="M12 55.5C12 30.923 31.923 11 56.5 11h24C86.851 11 92 16.149 92 22.5c0 8.008 6.492 14.5 14.5 14.5h95c8.008 0 14.5-6.492 14.5-14.5 0-6.351 5.149-11.5 11.5-11.5h24c24.577 0 44.5 19.923 44.5 44.5v521c0 24.577-19.923 44.5-44.5 44.5h-195C31.923 621 12 601.077 12 576.5v-521Z"
           />
           <circle cx="153.5" cy="112" r="48" fill="#EEE" />
-          <rect width="160" height="16" x="73.5" y="185" fill="#EEE" rx="8" />
-          <foreignObject width="100%" height="25" x="100" y="214" rx="4">
-            <p aria-label="user email" className="text-b-m">
-              {loadingUser ? "Loading" : userFullName.email}
+          {fname || lname ? (
+            <foreignObject width="100%" height="25" x="0" y="180" rx="4">
+              <p
+                aria-label="first-name"
+                className="text-xl font-bold text-richBlack text-center"
+              >
+                {fname}&nbsp;{lname}
+              </p>
+            </foreignObject>
+          ) : (
+            <rect width="160" height="16" x="73.5" y="185" fill="#EEE" rx="8" />
+          )}
+          <foreignObject width="100%" height="25" x="0" y="214" rx="4">
+            <p
+              aria-label="user email"
+              className="text-b-m text-center text-mediumGrey"
+            >
+              {loadingUser ? "Loading" : email}
             </p>
           </foreignObject>
 

@@ -18,12 +18,14 @@ const apiSlice = createApi({
         method: "PUT",
         body: data,
       }),
+      invalidatesTags: ["User"],
     }),
     getUserProfile: builder.query({
       query: (data) => ({
         url: `${USERS_URL}/${data}`,
       }),
       keepUnusedDataFor: 5,
+      providesTags: ["User"],
     }),
     createLink: builder.mutation({
       query: (data) => ({
@@ -31,12 +33,14 @@ const apiSlice = createApi({
         method: "POST",
         body: data,
       }),
+      invalidatesTags: ["Link"],
     }),
     getLinks: builder.query({
       query: (data) => ({
         url: data,
       }),
       keepUnusedDataFor: 5,
+      providesTags: ["Link"],
     }),
   }),
 });
