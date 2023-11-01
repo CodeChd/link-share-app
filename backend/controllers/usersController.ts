@@ -39,21 +39,19 @@ const loginUser = asyncHandler(async (req: Request, res: Response) => {
 //@access Private
 const updateProfile = asyncHandler(
   async (req: CustomRequest, res: Response) => {
-    const { firstName, lastName, email } = req.body;
+    const { firstName, lastName, email, image } = req.body;
     const user = await User.findOne(req.user._id);
 
     if (user) {
-      user.firstName = firstName;
-      user.lastName = lastName;
+      user.firstName = firstName || user.firstName;
+      user.lastName = lastName || lastName;
       user.email = email || user.email;
+      user.image = image || user.image;
 
       await user.save();
 
       res.status(200).json({
-        id: user._id,
-        email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName,
+        message: "User profile updated!",
       });
     } else {
       res.status(404);
@@ -71,6 +69,7 @@ const getUserProfile = asyncHandler(
       firstName: string;
       lastName: string;
       email: string;
+      image: string;
     }
 
     const user = (await User.findById(req.user._id).select(
@@ -82,6 +81,7 @@ const getUserProfile = asyncHandler(
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
+        image: user.image,
       });
     } else {
       res.status(404);

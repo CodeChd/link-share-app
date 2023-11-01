@@ -1,50 +1,61 @@
-import { useDispatch } from "react-redux";
 import {
   useGetLinksQuery,
   useGetUserProfileQuery,
   useUpdateProfileMutation,
+  useUploadProfileImageMutation,
 } from "../context/apiSlice";
 import { LINKS_URL } from "../constants";
 import { platformColorMap } from "../data/platformColorMap";
 import { platformCustomIconMap } from "../data/platformCustomIconMap";
 import { FormEvent, useState, useEffect } from "react";
-import { LinkType } from "../context/linkSlice";
-import { setCredentials } from "../context/authSlice";
 import toast from "react-hot-toast";
+import { LinkType } from "../context/linkSlice";
 
 const Profile = () => {
-  const dispatch = useDispatch();
   const {
     data,
     isLoading: loadingLinks,
     refetch,
   } = useGetLinksQuery(LINKS_URL);
+
+  const [uploadImage, { isLoading: loadingUpload }] =
+    useUploadProfileImageMutation();
+
   const [updateProfile, { isLoading: loadingUpdate }] =
     useUpdateProfileMutation();
+
   const { data: userFullName, isLoading: loadingUser } =
     useGetUserProfileQuery("info");
 
   const [fname, setFname] = useState<string>("");
   const [lname, setLname] = useState<string>("");
   const [email, setEmail] = useState<string>("");
+  const [image, setImage] = useState<string>("");
 
   useEffect(() => {
     if (!loadingUser) {
       setFname(userFullName.firstName);
       setLname(userFullName.lastName);
       setEmail(userFullName.email);
+      setImage(userFullName.image);
+      if (!userFullName.image) {
+        const storedImage = localStorage.getItem("image");
+        if (storedImage) {
+          setImage(storedImage);
+        }
+      }
     }
   }, [userFullName, loadingUser]);
 
   const submitHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const res = await updateProfile({
+      await updateProfile({
         firstName: fname,
         lastName: lname,
         email,
+        image,
       }).unwrap();
-      dispatch(setCredentials({ ...res }));
       toast.custom(
         <div className="bg-richBlack text-snow flex gap-4 p-4 rounded-xl">
           <img src="/images/icon-changes-saved.svg" alt="saved-icon" /> Your
@@ -54,6 +65,21 @@ const Profile = () => {
       refetch();
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const uploadHandler = async (e: any) => {
+    const formData = new FormData();
+    formData.append("image", e.target.files[0]);
+    console.log(e.target.files);
+    try {
+      const res = await uploadImage(formData).unwrap();
+      localStorage.setItem("image", res.image);
+      setImage(res.image);
+      toast.success(res.message);
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong!");
     }
   };
   return (
@@ -188,17 +214,42 @@ const Profile = () => {
 
             <label
               htmlFor="upload"
-              className="bg-babyPowder cursor-pointer w-48 h-48 flex justify-center items-center rounded-md "
+              className="bg-babyPowder cursor-pointer w-48 h-48 flex justify-center items-center rounded-md relative"
             >
+              <img
+                src={image}
+                alt=""
+                className="absolute inset-0 object-cover h-full rounded-md "
+              />
               <input
                 type="file"
                 id="upload"
                 accept=".png,.jpg,.jpeg"
                 className="hidden"
+                onChange={uploadHandler}
               />
-              <div className="flex flex-col justify-center items-center text-royalBlue font-bold  ">
-                <img src="/images/icon-upload-image.svg" alt="" />
-                <p>+ Upload image</p>
+              <div
+                className={`flex flex-col justify-center items-center font-bold ${
+                  image
+                    ? "absolute inset-0 bg-richBlack/50 opacity-0 hover:opacity-100"
+                    : "opacity-100 "
+                }`}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="40"
+                  height="40"
+                  fill="none"
+                  viewBox="0 0 40 40"
+                >
+                  <path
+                    fill={image ? "#FAFAFA" : "#633CFF"}
+                    d="M33.75 6.25H6.25a2.5 2.5 0 0 0-2.5 2.5v22.5a2.5 2.5 0 0 0 2.5 2.5h27.5a2.5 2.5 0 0 0 2.5-2.5V8.75a2.5 2.5 0 0 0-2.5-2.5Zm0 2.5v16.055l-4.073-4.072a2.5 2.5 0 0 0-3.536 0l-3.125 3.125-6.875-6.875a2.5 2.5 0 0 0-3.535 0L6.25 23.339V8.75h27.5ZM6.25 26.875l8.125-8.125 12.5 12.5H6.25v-4.375Zm27.5 4.375h-3.34l-5.624-5.625L27.91 22.5l5.839 5.84v2.91ZM22.5 15.625a1.875 1.875 0 1 1 3.75 0 1.875 1.875 0 0 1-3.75 0Z"
+                  />
+                </svg>
+                <p className={image ? "text-snow" : "text-royalBlue "}>
+                  + Upload image
+                </p>
               </div>
             </label>
 
@@ -266,7 +317,7 @@ const Profile = () => {
                 type="submit"
                 className="p-3 px-8 mt-4 rounded-lg bg-lavender text-white"
               >
-                {loadingUpdate ? "Loading" : "Save"}
+                {loadingUpdate || loadingUpload ? "Loading" : "Save"}
               </button>
             </div>
           </form>

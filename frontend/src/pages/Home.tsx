@@ -26,11 +26,8 @@ export interface LinkState {
 }
 const Home = () => {
   const dispatch = useDispatch();
-  const {
-    data: userFullName,
-    isLoading: loadingUser,
-    refetch: refetchUserDetails,
-  } = useGetUserProfileQuery("info");
+  const { data: userFullName, isLoading: loadingUser } =
+    useGetUserProfileQuery("info");
 
   const [fname, setFname] = useState<string>("");
   const [lname, setLname] = useState<string>("");
@@ -53,7 +50,6 @@ const Home = () => {
       setFname(userFullName.firstName);
       setLname(userFullName.lastName);
       setEmail(userFullName.email);
-      refetchUserDetails();
     }
   }, [userFullName, loadingUser]);
 
@@ -83,7 +79,7 @@ const Home = () => {
         });
       }
     };
-  }, [data]);
+  }, []);
 
   const AddLink = () => {
     const newLink = { id: linkItem.length + 1, image: "", name: "", link: "" };

@@ -3,10 +3,6 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 export interface User {
   userInfo: {
     isloggedIn: boolean;
-    firstName?: string;
-    lastName?: string;
-    id?: number;
-    email?: string;
   } | null;
 }
 
