@@ -9,10 +9,6 @@ const ImportUser = async () => {
 
     await User.insertMany([
       {
-        email: "john@gmail.com",
-        password: bcrypt.hashSync("handsome123"),
-      },
-      {
         email: "cj@gmail.com",
         password: bcrypt.hashSync("handsome123"),
       },
