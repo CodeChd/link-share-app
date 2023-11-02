@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { LINKS_URL, UPLOAD_URL, USERS_URL } from "../constants";
+import { LINKS_URL, PREVIEW_URL, UPLOAD_URL, USERS_URL } from "../constants";
 
 const apiSlice = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: "" }),
@@ -34,6 +34,13 @@ const apiSlice = createApi({
         body: data,
       }),
     }),
+    createPreviewProfile: builder.mutation({
+      query: (data) => ({
+        url: PREVIEW_URL,
+        method: "POST",
+        body: data,
+      }),
+    }),
     createLink: builder.mutation({
       query: (data) => ({
         url: LINKS_URL,
@@ -59,6 +66,7 @@ export const {
   useUpdateProfileMutation,
   useGetUserProfileQuery,
   useUploadProfileImageMutation,
+  useCreatePreviewProfileMutation,
 } = apiSlice;
 
 export default apiSlice;

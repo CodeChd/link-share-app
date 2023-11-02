@@ -20,6 +20,7 @@ app.use(express.json());
 app.use("/api/users", userRoutes);
 app.use("/api/links", linkRoutes);
 app.use("/api/upload", uploadRoute);
+app.use("/api/preview", uploadRoute);
 
 app.use(notFound);
 app.use(errorHandler);
