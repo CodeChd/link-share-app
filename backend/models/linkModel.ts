@@ -15,6 +15,7 @@ const linkSchema = new mongoose.Schema(
         },
         link: {
           type: String,
+          required: true,
         },
         image: {
           type: String,

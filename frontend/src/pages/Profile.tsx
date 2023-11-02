@@ -27,6 +27,7 @@ const Profile = () => {
   const { data: userFullName, isLoading: loadingUser } =
     useGetUserProfileQuery("info");
 
+  const [error, setError] = useState<boolean>(false);
   const [fname, setFname] = useState<string>("");
   const [lname, setLname] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -48,6 +49,10 @@ const Profile = () => {
   const submitHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
+      if (!email || !fname || !lname) {
+        setError(true);
+      }
+
       await updateProfile({
         firstName: fname,
         lastName: lname,
@@ -288,6 +293,11 @@ const Profile = () => {
             className="gap-8 bg-lightGrey/20 p-4 rounded-md w-full flex flex-col justify-between"
           >
             <div id="first-name" className="flex justify-between">
+              {error && email.length <= 0 && (
+                <span className="relative inline-block translate-y-[3.2rem] -translate-x-4">
+                  Can't be empty
+                </span>
+              )}
               <label
                 htmlFor="fname"
                 className="whitespace-nowrap pr-4 text-b-m text-mediumGrey"
@@ -338,8 +348,9 @@ const Profile = () => {
             </div>
             <div className="absolute left-0 bottom-0 border-t-2 border-solid w-full flex justify-end p-4 px-8 mt-[2.1rem] items-center">
               <button
+                disabled={!fname || !lname || !email}
                 type="submit"
-                className="p-3 px-8 mt-4 rounded-lg bg-lavender text-white"
+                className="disabled:bg-lavender disabled:cursor-not-allowed p-3 px-8 mt-4 rounded-lg text-white bg-royalBlue"
               >
                 {loadingUpdate || loadingUpload ? "Loading" : "Save"}
               </button>

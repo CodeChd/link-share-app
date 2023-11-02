@@ -18,6 +18,7 @@ import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
 import SortableLinks from "../components/SortableLinks";
 import { LINKS_URL } from "../constants";
+import { isValidUrl } from "../utils/isValidUrl";
 
 export interface LinkState {
   link: {
@@ -29,6 +30,8 @@ const Home = () => {
   const { data: userFullName, isLoading: loadingUser } =
     useGetUserProfileQuery("info");
 
+  const [platformError, setPlatformError] = useState(false);
+  const [linkError, setLinkError] = useState(false);
   const [fname, setFname] = useState<string>("");
   const [lname, setLname] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -59,7 +62,7 @@ const Home = () => {
     }
   }, [userFullName, loadingUser]);
 
-  //Loading links logic
+  //Combine dbLinks details with Local link details to localStiarge
   useEffect(() => {
     if (data) {
       const updatedLink = data?.linkItems.map((x: LinkType, index: number) => ({
@@ -75,16 +78,16 @@ const Home = () => {
       });
     }
 
-    return () => {
-      if (data) {
-        data?.linkItems.forEach((link: LinkType) => {
-          const existingLink = linkItem.find((x) => x._id === link._id);
-          if (existingLink) {
-            dispatch(removeLink(link._id as number));
-          }
-        });
-      }
-    };
+    // return () => {
+    //   if (data) {
+    //     data?.linkItems.forEach((link: LinkType) => {
+    //       const existingLink = linkItem.find((x) => x._id === link._id);
+    //       if (existingLink) {
+    //         dispatch(removeLink(link._id as number));
+    //       }
+    //     });
+    //   }
+    // };
   }, []);
 
   const AddLink = () => {
@@ -103,7 +106,28 @@ const Home = () => {
   };
 
   const saveLinkHandler = async () => {
+    const isLinkEmpty = linkItem.find((x) => x.link.length === 0);
+    const isPlatformEmpty = linkItem.find((x) => x.name.length === 0);
+
     try {
+      if (isLinkEmpty) {
+        setLinkError(true);
+        return;
+      }
+      if (isPlatformEmpty) {
+        setPlatformError(true);
+        return;
+      }
+
+      let valid;
+      linkItem.forEach((x) => {
+        valid = isValidUrl(x.link);
+      });
+
+      if (!valid) {
+        return;
+      }
+
       await saveLink({
         linkItem,
       }).unwrap();
@@ -297,7 +321,12 @@ const Home = () => {
                 strategy={verticalListSortingStrategy}
               >
                 {linkItem.map((x: LinkType) => (
-                  <SortableLinks key={x.id} link={x} />
+                  <SortableLinks
+                    key={x.id}
+                    linkDetails={x}
+                    platformError={platformError}
+                    linkError={linkError}
+                  />
                 ))}
               </SortableContext>
             </DndContext>
@@ -310,9 +339,9 @@ const Home = () => {
             onClick={saveLinkHandler}
             className={`p-3 px-8 mt-4 disabled:cursor-not-allowed rounded-lg ${
               isObjectEmpty(linkItem) && data?.linkItems.length === 0
-                ? "bg-lavender "
-                : "bg-royalBlue "
-            } text-white`}
+                ? "bg-lavender"
+                : "bg-royalBlue"
+            } text-white `}
           >
             {isLoading ? "Loading" : "Save"}
           </button>

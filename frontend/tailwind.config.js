@@ -25,6 +25,7 @@ export default {
         white: "#FFFFFF",
         crimson: "#FF3939",
       },
+      
       fontSize: {
         "h-m-b": "32px",
         "h-s-b": "16px",

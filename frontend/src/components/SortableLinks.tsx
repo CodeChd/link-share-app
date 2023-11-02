@@ -3,10 +3,18 @@ import Links from "./Links";
 import { useSortable } from "@dnd-kit/sortable";
 import { LinkType } from "../context/linkSlice";
 
-const SortableLinks = ({ link }: { link: LinkType }) => {
+const SortableLinks = ({
+  linkDetails,
+  linkError,
+  platformError,
+}: {
+  platformError: boolean;
+  linkDetails: LinkType;
+  linkError: boolean;
+}) => {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({
-      id: link.id,
+      id: linkDetails.id,
       transition: {
         duration: 600,
         easing: "cubic-bezier(0.25, 1, 0.5, 1)",
@@ -19,8 +27,10 @@ const SortableLinks = ({ link }: { link: LinkType }) => {
   };
   return (
     <Links
-      key={link?.id}
-      data={link}
+      key={linkDetails?.id}
+      data={linkDetails}
+      platformError={platformError}
+      linkError={linkError}
       attributes={attributes}
       listeners={listeners}
       setNodeRef={setNodeRef}

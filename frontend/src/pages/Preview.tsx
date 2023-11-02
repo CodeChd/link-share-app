@@ -32,7 +32,7 @@ const Preview = () => {
 
   return (
     <>
-      <div className="bg-royalBlue h-[25rem] w-full p-4 rounded-bl-[3rem] rounded-br-[3rem]">
+      <div className="bg-royalBlue h-[22rem] w-full p-4 rounded-bl-[2rem] rounded-br-[2rem]">
         <div className="bg-white p-2 rounded-lg w-full">
           <nav className=" p-2  w-full flex justify-between">
             <Link
