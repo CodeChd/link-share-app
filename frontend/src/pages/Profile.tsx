@@ -361,7 +361,7 @@ const Profile = () => {
                 className="w-[85%] bg-email bg-no-repeat h-12 p-2 ps-8 bg-[left_0.4rem_bottom_0.8rem] outline-none bg-[length:15px] border-solid border-2  rounded-lg focus:border focus:border-solid  focus:border-royalBlue  focus:drop-shadow-input placeholder:text-mediumGrey/90 "
               />
             </div>
-            <div className="absolute left-0 bottom-0 border-t-2 border-solid w-full flex justify-end p-4 px-8 mt-[2.1rem] items-center">
+            <div className="absolute left-0 bottom-0 border-t-2 border-solid w-full flex justify-end p-4 mb-3 px-8 items-center">
               <button
                 disabled={(!fname && !lname) || !email}
                 type="submit"

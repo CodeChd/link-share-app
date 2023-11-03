@@ -322,7 +322,7 @@ const Home = () => {
           )}
         </div>
 
-        <div className="absolute left-0 border-t-2 border-solid w-full flex justify-end p-4 px-8">
+        <div className="absolute left-0 bottom-0 border-t-2 border-solid w-full flex justify-end mb-3 p-4 px-8 ">
           <button
             disabled={isObjectEmpty(linkItem) && data?.linkItems.length === 0}
             onClick={saveLinkHandler}

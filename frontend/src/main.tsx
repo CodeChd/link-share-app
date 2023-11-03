@@ -16,13 +16,14 @@ import Register from "./pages/Register.tsx";
 import Profile from "./pages/Profile.tsx";
 import Preview from "./pages/Preview.tsx";
 import PrivateRoute from "./components/Private/PrivateRoute.tsx";
+import PublicPreview from "./pages/PublicPreview.tsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="" element={<App />}>
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
-      <Route path="/previews/:id" element={<Preview />} />
+      <Route path="/previews/:id" element={<PublicPreview />} />
 
       <Route path="" element={<PrivateRoute />}>
         <Route index={true} path="/" element={<Home />} />

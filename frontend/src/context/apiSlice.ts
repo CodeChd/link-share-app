@@ -41,6 +41,11 @@ const apiSlice = createApi({
         body: data,
       }),
     }),
+    getUserPublicProfile: builder.query({
+      query: (data) => ({
+        url: `${PREVIEW_URL}/${data}/profile`,
+      }),
+    }),
     createLink: builder.mutation({
       query: (data) => ({
         url: LINKS_URL,
@@ -67,6 +72,7 @@ export const {
   useGetUserProfileQuery,
   useUploadProfileImageMutation,
   useCreatePreviewProfileMutation,
+  useGetUserPublicProfileQuery,
 } = apiSlice;
 
 export default apiSlice;
