@@ -37,7 +37,7 @@ const Profile = () => {
   const [image, setImage] = useState<string | null>("");
 
   // preview public profile id
-  const [userId, setUserId] = useState<string | null>("");
+  const [userId, setUserId] = useState<string>("");
 
   useEffect(() => {
     if (!loadingUser) {
@@ -101,10 +101,10 @@ const Profile = () => {
     }
   };
   return (
-    <div className="grid max-desktop:grid-cols-[1fr_1fr] grid-cols-[780px_1fr] gap-5 px-5 ">
+    <div className="grid max-laptop:grid-cols-1 max-desktop:grid-cols-[1fr_1fr] grid-cols-[780px_1fr] gap-5  ">
       <div
         id="left"
-        className="bg-white p-[5rem] flex justify-center rounded-lg"
+        className="bg-white p-[5rem] flex justify-center rounded-lg max-laptop:hidden"
         style={{ height: "calc(800px)" }}
       >
         <svg
@@ -235,8 +235,8 @@ const Profile = () => {
       </div>
 
       <div id="right" className="relative bg-white p-[2rem] rounded-md">
-        <div>
-          <h1 className="text-h-m-b font-bold text-richBlack">
+        <div className="px-5">
+          <h1 className="max-tablet:text-[28px] text-h-m-b font-bold text-richBlack">
             Profile Details
           </h1>
           <p className="text-b-m text-mediumGrey mt-2">
@@ -245,12 +245,12 @@ const Profile = () => {
         </div>
 
         <div
-          aria-label="user-info"
-          className="overflow-hidden w-full flex flex-col gap-8 justify-center items-center my-6 rounded-md "
+          aria-label="user-profile-image"
+          className="overflow-hidden w-full flex flex-col gap-8 justify-center items-center my-6 rounded-lg px-5"
         >
           <div
             aria-label="upload-image"
-            className="grid grid-cols-[2fr_1fr_1fr] place-items-center gap-4 bg-lightGrey/20 p-4 rounded-mdx "
+            className="grid max-phone:grid-cols-1 grid-cols-[2fr_1fr_1fr] max-phone:place-items-start place-items-center gap-4 bg-lightGrey/20 p-4 rounded-md w-full"
           >
             <div className="w-full">
               <h3 className="text-mediumGrey text-b-m">Profile picture</h3>
@@ -258,7 +258,7 @@ const Profile = () => {
 
             <label
               htmlFor="upload"
-              className="bg-babyPowder cursor-pointer w-48 h-48 flex justify-center items-center rounded-md relative"
+              className="bg-babyPowder cursor-pointer w-48 h-48 flex justify-center items-center rounded-md relative "
             >
               <img
                 src={image as string}
@@ -297,17 +297,18 @@ const Profile = () => {
               </div>
             </label>
 
-            <p className="text-mediumGrey max-w-[30vw] mx-auto text-b-s">
+            <p className="text-mediumGrey  phone:max-w-[30vw] max-phone:m-0 mx-auto text-b-s">
               Image must be below 1024x1024px. Use PNG or JPG format.
             </p>
           </div>
+          {/*  */}
 
           <form
             onSubmit={submitHandler}
             aria-label="user-input"
-            className="gap-8 bg-lightGrey/20 p-4 rounded-md w-full flex flex-col justify-between"
+            className="gap-8 bg-lightGrey/20 p-4 rounded-lg w-full flex flex-col justify-between"
           >
-            <div id="first-name" className="flex justify-between">
+            <div id="first-name" className="flex max-tablet:flex-col  justify-between">
               {error && email.length <= 0 && (
                 <span className="relative inline-block translate-y-[3.2rem] -translate-x-4">
                   Can't be empty
@@ -315,7 +316,7 @@ const Profile = () => {
               )}
               <label
                 htmlFor="fname"
-                className="whitespace-nowrap pr-4 text-b-m text-mediumGrey"
+                className="whitespace-nowrap pr-4 text-b-m text-mediumGrey mb-1"
               >
                 First name*
               </label>
@@ -325,13 +326,13 @@ const Profile = () => {
                 value={fname}
                 onChange={(e) => setFname(e.target.value)}
                 placeholder="e.g.Cj"
-                className="w-[85%] p-3 h-12 bg-[left_0.4rem_bottom_0.8rem] outline-none bg-[length:15px] border-solid border-2  rounded-lg focus:border focus:border-solid  focus:border-royalBlue  focus:drop-shadow-input placeholder:text-mediumGrey/50"
+                className="max-tablet:w-full w-[85%] p-3 h-12 bg-[left_0.4rem_bottom_0.8rem] outline-none bg-[length:15px] border-solid border-2  rounded-lg focus:border focus:border-solid  focus:border-royalBlue  focus:drop-shadow-input placeholder:text-mediumGrey/50"
               />
             </div>
-            <div id="last-name" className="flex justify-between ">
+            <div id="last-name" className="flex max-tablet:flex-col  justify-between ">
               <label
                 htmlFor="lname"
-                className="whitespace-nowrap pr-4 text-b-m text-mediumGrey"
+                className="whitespace-nowrap pr-4 text-b-m text-mediumGrey mb-1"
               >
                 Last name*
               </label>
@@ -341,13 +342,13 @@ const Profile = () => {
                 value={lname}
                 onChange={(e) => setLname(e.target.value)}
                 placeholder="e.g.Francisco"
-                className="w-[85%] p-3 h-12 bg-[left_0.4rem_bottom_0.8rem] outline-none bg-[length:15px] border-solid border-2  rounded-lg focus:border focus:border-solid  focus:border-royalBlue  focus:drop-shadow-input placeholder:text-mediumGrey/50"
+                className="max-tablet:w-full w-[85%] p-3 h-12 bg-[left_0.4rem_bottom_0.8rem] outline-none bg-[length:15px] border-solid border-2  rounded-lg focus:border focus:border-solid  focus:border-royalBlue  focus:drop-shadow-input placeholder:text-mediumGrey/50"
               />
             </div>
-            <div id="Email" className="flex justify-between ">
+            <div id="Email" className="flex max-tablet:flex-col  justify-between ">
               <label
                 htmlFor="fname"
-                className="whitespace-nowrap pr-4 text-b-m text-mediumGrey"
+                className="whitespace-nowrap pr-4 text-b-m text-mediumGrey mb-1"
               >
                 Email
               </label>
@@ -358,21 +359,21 @@ const Profile = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="e.g.email@example.com"
-                className="w-[85%] bg-email bg-no-repeat h-12 p-2 ps-8 bg-[left_0.4rem_bottom_0.8rem] outline-none bg-[length:15px] border-solid border-2  rounded-lg focus:border focus:border-solid  focus:border-royalBlue  focus:drop-shadow-input placeholder:text-mediumGrey/90 "
+                className=" max-tablet:w-full  w-[85%]  bg-email bg-no-repeat h-12 p-2 ps-8 bg-[left_0.4rem_bottom_0.8rem] outline-none bg-[length:15px] border-solid border-2  rounded-lg focus:border focus:border-solid  focus:border-royalBlue  focus:drop-shadow-input placeholder:text-mediumGrey/90 "
               />
             </div>
-            <div className="absolute left-0 bottom-0 border-t-2 border-solid w-full flex justify-end p-4 mb-3 px-8 items-center">
-              <button
-                disabled={(!fname && !lname) || !email}
-                type="submit"
-                className="disabled:bg-lavender disabled:cursor-not-allowed p-3 px-8 mt-4 rounded-lg text-white bg-royalBlue"
-              >
-                {loadingUpdate || loadingUpload || loadingPreview
-                  ? "Loading"
-                  : "Save"}
-              </button>
-            </div>
           </form>
+        </div>
+        <div className="absolute left-0 bottom-0 border-t-2 border-solid w-full flex justify-end p-4 mb-3 items-center max-laptop:relative">
+          <button
+            disabled={(!fname && !lname) || !email}
+            type="submit"
+            className="disabled:bg-lavender disabled:cursor-not-allowed p-3 px-8 mt-4 rounded-lg text-white bg-royalBlue"
+          >
+            {loadingUpdate || loadingUpload || loadingPreview
+              ? "Loading"
+              : "Save"}
+          </button>
         </div>
       </div>
     </div>

@@ -34,6 +34,42 @@ const loginUser = asyncHandler(async (req: Request, res: Response) => {
   }
 });
 
+//@desc Register User
+//@routes POST /api/users/register
+//@access Public
+const registerUser = asyncHandler(async (req: Request, res: Response) => {
+  const { email, password } = req.body;
+
+  const userExist = await User.findOne({ email });
+
+  if (userExist) {
+    res.status(400);
+    throw new Error("User already exist!");
+  }
+
+  if (email.length === 0 || password.length === 0) {
+    res.status(400);
+    throw new Error("Email or Password can't be empty!");
+  }
+
+  const user = await User.create({
+    email,
+    password,
+  });
+
+  if (user) {
+    generateToken(res, user._id);
+
+    res.status(201).json({
+      isloggedIn: true,
+      message: "User have been registered!",
+    });
+  } else {
+    res.status(400);
+    throw new Error("Invalid user data");
+  }
+});
+
 //@desc Update user profile
 //@routes PUT /api/users/profile
 //@access Private
@@ -90,4 +126,4 @@ const getUserProfile = asyncHandler(
   }
 );
 
-export { loginUser, updateProfile, getUserProfile };
+export { loginUser, registerUser, updateProfile, getUserProfile };

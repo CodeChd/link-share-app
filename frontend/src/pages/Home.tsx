@@ -27,8 +27,11 @@ export interface LinkState {
 }
 const Home = () => {
   const dispatch = useDispatch();
-  const { data: userFullName, isLoading: loadingUser } =
-    useGetUserProfileQuery("info");
+  const {
+    data: userFullName,
+    isLoading: loadingUser,
+    isError: userError,
+  } = useGetUserProfileQuery("info");
 
   const [platformError, setPlatformError] = useState(false);
   const [linkError, setLinkError] = useState(false);
@@ -77,7 +80,7 @@ const Home = () => {
         }
       });
     }
-  }, []);
+  });
 
   const AddLink = () => {
     const newLink = { id: linkItem.length + 1, image: "", name: "", link: "" };
@@ -134,10 +137,10 @@ const Home = () => {
   };
 
   return (
-    <div className="grid max-desktop:grid-cols-[1fr_1fr] grid-cols-[780px_1fr] gap-5 px-5 ">
+    <div className="grid max-laptop:grid-cols-1 max-desktop:grid-cols-[1fr_1fr] grid-cols-[780px_1fr] gap-5 px-5 ">
       <div
         id="left"
-        className="bg-white p-[5rem] flex justify-center rounded-lg"
+        className="bg-white p-[5rem] flex justify-center rounded-lg max-laptop:hidden "
         style={{ height: "calc(800px)" }}
       >
         <svg
@@ -172,6 +175,7 @@ const Home = () => {
                     width="100"
                   />
                 </pattern>
+                z
               </defs>
               <circle
                 stroke="#633CFF"
@@ -261,9 +265,9 @@ const Home = () => {
         </svg>
       </div>
 
-      <div id="right" className="relative bg-white rounded-md">
+      <div id="right" className="relative bg-white rounded-md ">
         <div className="px-[2rem] my-5">
-          <h1 className="text-h-m-b font-bold text-richBlack">
+          <h1 className="max-tablet:text-[28px] whitespace-nowrap text-h-m-b font-bold text-richBlack">
             Customize your links
           </h1>
           <p className="text-b-m text-mediumGrey mt-2">
@@ -292,7 +296,7 @@ const Home = () => {
               <h2 className="text-richBlack text-h-m-b font-bold">
                 Let's get you started
               </h2>
-              <p className="text-mediumGrey max-w-[30vw] mx-auto">
+              <p className="text-mediumGrey max-w-[60vw]  tablet:max-w-[30vw] mx-auto">
                 Use the “Add new link” button to get started. Once you have more
                 than one link, you can reorder and edit them. We’re here to help
                 you share your profiles with everyone!
@@ -322,7 +326,7 @@ const Home = () => {
           )}
         </div>
 
-        <div className="absolute left-0 bottom-0 border-t-2 border-solid w-full flex justify-end mb-3 p-4 px-8 ">
+        <div className="absolute left-0 bottom-0 border-t-2 border-solid w-full flex justify-end mb-3 p-4 px-8 max-laptop:relative">
           <button
             disabled={isObjectEmpty(linkItem) && data?.linkItems.length === 0}
             onClick={saveLinkHandler}
@@ -332,7 +336,7 @@ const Home = () => {
                 : "bg-royalBlue"
             } text-white `}
           >
-            {isLoading ? "Loading" : "Save"}
+            {isLoading || userError ? "Loading" : "Save"}
           </button>
         </div>
       </div>

@@ -22,7 +22,6 @@ const previewSchema = new mongoose.Schema({
   },
   profileImage: {
     type: String,
-    required: true,
   },
   fullName: {
     type: String,

@@ -1,15 +1,43 @@
 import { FormEvent, useState } from "react";
+import { useRegisterUserMutation } from "../context/apiSlice";
+import { useDispatch } from "react-redux";
+import { setCredentials } from "../context/authSlice";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [error, setError] = useState<boolean>(false);
 
-  const submitHandler = (e: FormEvent<HTMLFormElement>) => {
+  const [registerUser, { isLoading: loadingRegister }] =
+    useRegisterUserMutation();
+
+  const submitHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!email || !password) {
-      setError(true);
+
+    try {
+      if (!email || !password) {
+        setError(true);
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        toast.error("Password mismatched!");
+        return;
+      }
+
+      const res = await registerUser({ email, password }).unwrap();
+      dispatch(setCredentials({ isloggedIn: res.isloggedIn }));
+      toast.success(res.message);
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong!");
     }
   };
 
@@ -116,7 +144,7 @@ const Register = () => {
           type="submit"
           className="bg-royalBlue text-white rounded-md p-3  w-full mt-5 hover:bg-lavender transition-colors ease-out disabled:bg-lavender/40"
         >
-          Login
+          {loadingRegister ? "Loading" : "Register"}
         </button>
 
         <p className="mt-4 text-center text-mediumGrey">

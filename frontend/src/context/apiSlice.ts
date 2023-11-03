@@ -12,6 +12,13 @@ const apiSlice = createApi({
         body: data,
       }),
     }),
+    registerUser: builder.mutation({
+      query: (data) => ({
+        url: `${USERS_URL}/register`,
+        method: "POST",
+        body: data,
+      }),
+    }),
     updateProfile: builder.mutation({
       query: (data) => ({
         url: `${USERS_URL}/profile`,
@@ -66,6 +73,7 @@ const apiSlice = createApi({
 
 export const {
   useLoginUserMutation,
+  useRegisterUserMutation,
   useCreateLinkMutation,
   useGetLinksQuery,
   useUpdateProfileMutation,

@@ -7,6 +7,9 @@ export default {
     },
     screens: {
       desktop: "1920px",
+      laptop: "1000px",
+      tablet: "690px",
+      phone: "550px",
     },
     extend: {
       backgroundImage: {
@@ -25,7 +28,7 @@ export default {
         white: "#FFFFFF",
         crimson: "#FF3939",
       },
-      
+
       fontSize: {
         "h-m-b": "32px",
         "h-s-b": "16px",

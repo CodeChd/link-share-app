@@ -24,15 +24,12 @@ const createPreviewProfile = asyncHandler(
       throw new Error("User profile not found!");
     }
 
-    if (!link) {
-      res.status(404);
-      throw new Error("Link not found!");
-    }
-
     if (!userProfile) {
       userProfile = new Preview({
         profileImage: user.image,
-        fullName: `${user.firstName} ${user.lastName}`,
+        fullName: `${user.firstName ? user.firstName : ""} ${
+          user.lastName ? user.lastName : ""
+        }`,
         email: user.email,
         linkItems: link?.linkItems,
       });
@@ -40,9 +37,14 @@ const createPreviewProfile = asyncHandler(
       const existingUser = req.body.userId == userProfile.userId;
       if (existingUser) {
         userProfile.fullName =
-          `${user.firstName} ${user.lastName}` || userProfile.fullName;
+          `${user.firstName ? user.firstName : ""} ${
+            user.lastName ? user.lastName : ""
+          }` || userProfile.fullName;
         userProfile.email = user.email || userProfile.email;
         userProfile.profileImage = user.image || userProfile.profileImage;
+      }
+
+      if (link) {
         userProfile.linkItems = link?.linkItems;
       }
     }

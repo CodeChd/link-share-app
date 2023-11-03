@@ -24,23 +24,23 @@ const PublicPreview = () => {
 
   return (
     <>
-      <div className="bg-royalBlue h-[22rem] w-full p-4 rounded-bl-[2rem] rounded-br-[2rem]">
+      <div className="bg-royalBlue max-tablet:bg-snow h-[22rem] w-full p-4 rounded-bl-[2rem] rounded-br-[2rem]">
         <div className="bg-white p-2 rounded-lg w-full">
           <nav className=" p-2  w-full flex justify-between">
             <Link
               to="/"
-              className="p-3 px-8 hover:bg-babyPowder/50 text-center font-bold rounded-md border-royalBlue text-royalBlue border-solid  border "
+              className="p-3 max-tablet:px-3 px-8 hover:bg-babyPowder/50 text-center font-bold rounded-md border-royalBlue text-royalBlue border-solid  border "
             >
               Back to Editor
             </Link>
-            <button className="rounded-md p-2 px-8 text-white bg-royalBlue hover:bg-lavender font-bold ">
+            <button className="rounded-md p-2 max-tablet:px-3 px-8 text-white bg-royalBlue hover:bg-lavender font-bold ">
               Share Link
             </button>
           </nav>
         </div>
       </div>
 
-      <div className="rounded-xl mx-auto w-full h-full max-w-[350px] drop-shadow-lg bg-white -mt-[8rem] p-8 flex flex-col items-center justify-center gap-4">
+      <div className="rounded-xl mx-auto w-full h-full max-w-[350px] drop-shadow-lg tablet:bg-white -mt-[8rem] p-8 flex flex-col items-center justify-center gap-4">
         {!image ? (
           <svg>
             <circle
