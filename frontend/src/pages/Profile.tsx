@@ -1,4 +1,5 @@
 import {
+  useCreatePreviewProfileMutation,
   useGetLinksQuery,
   useGetUserProfileQuery,
   useUpdateProfileMutation,
@@ -23,6 +24,8 @@ const Profile = () => {
 
   const [updateProfile, { isLoading: loadingUpdate }] =
     useUpdateProfileMutation();
+  const [createPreviewProfile, { isLoading: loadingPreview }] =
+    useCreatePreviewProfileMutation();
 
   const { data: userFullName, isLoading: loadingUser } =
     useGetUserProfileQuery("info");
@@ -33,16 +36,25 @@ const Profile = () => {
   const [email, setEmail] = useState<string>("");
   const [image, setImage] = useState<string | null>("");
 
+  // preview public profile id
+  const [userId, setUserId] = useState<string | null>("");
+
   useEffect(() => {
     if (!loadingUser) {
       setFname(userFullName.firstName);
       setLname(userFullName.lastName);
       setEmail(userFullName.email);
       setImage(userFullName.image);
+
       const storedImage = localStorage.getItem("image");
       if (!userFullName.image || storedImage) {
         setImage(storedImage);
       }
+    }
+    const storeUserPreviewId = localStorage.getItem("userPreviewId");
+    const id = storeUserPreviewId;
+    if (id) {
+      setUserId(id);
     }
   }, [userFullName, loadingUser]);
 
@@ -59,6 +71,10 @@ const Profile = () => {
         email,
         image,
       }).unwrap();
+
+      const res = await createPreviewProfile({ userId }).unwrap();
+      localStorage.setItem("userPreviewId", res.userId);
+
       toast.custom(
         <div className="bg-richBlack text-snow flex gap-4 p-4 rounded-xl">
           <img src="/images/icon-changes-saved.svg" alt="saved-icon" /> Your
@@ -74,7 +90,6 @@ const Profile = () => {
   const uploadHandler = async (e: any) => {
     const formData = new FormData();
     formData.append("image", e.target.files[0]);
-    console.log(e.target.files);
     try {
       const res = await uploadImage(formData).unwrap();
       setImage(res.image);
@@ -348,11 +363,13 @@ const Profile = () => {
             </div>
             <div className="absolute left-0 bottom-0 border-t-2 border-solid w-full flex justify-end p-4 px-8 mt-[2.1rem] items-center">
               <button
-                disabled={!fname || !lname || !email}
+                disabled={(!fname && !lname) || !email}
                 type="submit"
                 className="disabled:bg-lavender disabled:cursor-not-allowed p-3 px-8 mt-4 rounded-lg text-white bg-royalBlue"
               >
-                {loadingUpdate || loadingUpload ? "Loading" : "Save"}
+                {loadingUpdate || loadingUpload || loadingPreview
+                  ? "Loading"
+                  : "Save"}
               </button>
             </div>
           </form>

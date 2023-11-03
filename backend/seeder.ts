@@ -12,6 +12,10 @@ const ImportUser = async () => {
         email: "cj@gmail.com",
         password: bcrypt.hashSync("handsome123"),
       },
+      {
+        email: "john@gmail.com",
+        password: bcrypt.hashSync("handsome123"),
+      },
     ]);
 
     console.log("UserData Imported");

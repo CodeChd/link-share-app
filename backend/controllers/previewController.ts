@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { Document } from "mongoose";
 import asyncHandler from "../middleware/asyncHandler";
 import User from "../models/userModel";
 import Preview from "../models/previewModel";
@@ -14,10 +13,9 @@ interface CustomRequest extends Request {
 //@access Private
 const createPreviewProfile = asyncHandler(
   async (req: CustomRequest, res: Response) => {
-    const { userId } = req.body;
     const user = await User.findById(req.user._id);
     const link = await Link.findOne({ user: req.user._id });
-    let userProfile = await Preview.findOne({ userId });
+    let userProfile = await Preview.findOne({ userId: req.body.userId });
 
     if (!user) {
       res.status(404);
@@ -31,18 +29,21 @@ const createPreviewProfile = asyncHandler(
 
     if (!userProfile) {
       userProfile = new Preview({
-        userId,
         profileImage: user.image,
         fullName: `${user.firstName} ${user.lastName}`,
         email: user.email,
         linkItems: link?.linkItems,
       });
     } else {
-      userProfile.fullName =
-        `${user.firstName} ${user.lastName}` || userProfile.fullName;
-      userProfile.email = user.email || userProfile.email;
-      userProfile.profileImage = user.image || userProfile.profileImage;
-      userProfile.linkItems = link?.linkItems;
+      const existingUser =
+        user.firstName?.trim() === userProfile.fullName.split(" ")[0].trim();
+      if (existingUser) {
+        userProfile.fullName =
+          `${user.firstName} ${user.lastName}` || userProfile.fullName;
+        userProfile.email = user.email || userProfile.email;
+        userProfile.profileImage = user.image || userProfile.profileImage;
+        userProfile.linkItems = link?.linkItems;
+      }
     }
 
     const preview = await userProfile?.save();
@@ -50,5 +51,7 @@ const createPreviewProfile = asyncHandler(
     res.status(200).json(preview);
   }
 );
+
+
 
 export { createPreviewProfile };

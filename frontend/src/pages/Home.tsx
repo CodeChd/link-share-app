@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { LinkType, dragDrop, removeLink } from "../context/linkSlice";
+import { LinkType, dragDrop } from "../context/linkSlice";
 import { addLink } from "../context/linkSlice";
 import isObjectEmpty from "../utils/isObjectEmpty";
 import { platformColorMap } from "../data/platformColorMap";
@@ -77,17 +77,6 @@ const Home = () => {
         }
       });
     }
-
-    // return () => {
-    //   if (data) {
-    //     data?.linkItems.forEach((link: LinkType) => {
-    //       const existingLink = linkItem.find((x) => x._id === link._id);
-    //       if (existingLink) {
-    //         dispatch(removeLink(link._id as number));
-    //       }
-    //     });
-    //   }
-    // };
   }, []);
 
   const AddLink = () => {
