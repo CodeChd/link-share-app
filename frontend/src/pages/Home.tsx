@@ -133,7 +133,6 @@ const Home = () => {
       );
       refetchLinks();
     } catch (error: any) {
-      console.log(error.error);
       toast.error("Something's wrong!");
     }
   };

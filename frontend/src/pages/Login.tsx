@@ -27,7 +27,6 @@ const Login = () => {
       toast.success(res.message);
       navigate("/");
     } catch (error: any) {
-      console.log(error.error);
       toast.error("Something went wrong!")
     }
   };
