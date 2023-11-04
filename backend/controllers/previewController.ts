@@ -37,15 +37,14 @@ const createPreviewProfile = asyncHandler(
       const existingUser = req.body.userId == userProfile.userId;
       if (existingUser) {
         userProfile.fullName =
-          `${user.firstName ? user.firstName : ""} ${
-            user.lastName ? user.lastName : ""
-          }` || userProfile.fullName;
-        userProfile.email = user.email || userProfile.email;
-        userProfile.profileImage = user.image || userProfile.profileImage;
+          `${user.firstName ?? ""} ${user.lastName ?? ""}` ||
+          userProfile.fullName;
+        userProfile.email = user.email ?? userProfile.email;
+        userProfile.profileImage = user.image ?? userProfile.profileImage;
       }
 
       if (link) {
-        userProfile.linkItems = link?.linkItems;
+        userProfile.linkItems = link?.linkItems ?? [];
       }
     }
 

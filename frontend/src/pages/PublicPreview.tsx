@@ -12,13 +12,13 @@ const PublicPreview = () => {
 
   const [fullName, setFullName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
-  const [image, setImage] = useState<string | null>("");
+  const [image, setImage] = useState<string>("");
 
   useEffect(() => {
     if (!loadingProfile) {
-      setFullName(profile.fullName);
-      setEmail(profile.email);
-      setImage(profile.profileImage);
+      setFullName(profile.fullName ?? "");
+      setEmail(profile.email ?? "");
+      setImage(profile.profileImage ?? "");
     }
   }, [profile, loadingProfile]);
 

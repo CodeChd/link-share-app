@@ -24,7 +24,7 @@ const Preview = () => {
       setEmail(userFullName.email);
       setImage(userFullName.image);
       const storedImage = localStorage.getItem("image");
-      if (!userFullName.image || storedImage) {
+      if (storedImage) {
         setImage(storedImage);
       }
     }

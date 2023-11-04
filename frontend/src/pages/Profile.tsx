@@ -8,7 +8,7 @@ import {
 import { LINKS_URL } from "../constants";
 import { platformColorMap } from "../data/platformColorMap";
 import { platformCustomIconMap } from "../data/platformCustomIconMap";
-import { FormEvent, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { LinkType } from "../context/linkSlice";
 
@@ -34,23 +34,23 @@ const Profile = () => {
   const [fname, setFname] = useState<string>("");
   const [lname, setLname] = useState<string>("");
   const [email, setEmail] = useState<string>("");
-  const [image, setImage] = useState<string | null>("");
+  const [image, setImage] = useState<string>("");
 
-  // preview public profile id
+  //public profile id
   const [userId, setUserId] = useState<string>("");
 
   useEffect(() => {
     if (!loadingUser) {
-      setFname(userFullName.firstName);
-      setLname(userFullName.lastName);
-      setEmail(userFullName.email);
+      setFname(userFullName.firstName ?? "");
+      setLname(userFullName.lastName ?? "");
+      setEmail(userFullName.email ?? "");
       setImage(userFullName.image);
-
       const storedImage = localStorage.getItem("image");
-      if (!userFullName.image || storedImage) {
+      if (storedImage) {
         setImage(storedImage);
       }
     }
+
     const storeUserPreviewId = localStorage.getItem("userPreviewId");
     const id = storeUserPreviewId;
     if (id) {
@@ -58,8 +58,7 @@ const Profile = () => {
     }
   }, [userFullName, loadingUser]);
 
-  const submitHandler = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const submitHandler = async () => {
     try {
       if (!email || !fname || !lname) {
         setError(true);
@@ -84,6 +83,7 @@ const Profile = () => {
       refetch();
     } catch (error) {
       console.log(error);
+      toast.error("Something went wrong!");
     }
   };
 
@@ -92,8 +92,8 @@ const Profile = () => {
     formData.append("image", e.target.files[0]);
     try {
       const res = await uploadImage(formData).unwrap();
-      setImage(res.image);
       localStorage.setItem("image", res.image);
+      setImage(res.image);
       toast.success(res.message);
     } catch (error) {
       console.log(error);
@@ -235,7 +235,7 @@ const Profile = () => {
       </div>
 
       <div id="right" className="relative bg-white p-[2rem] rounded-md">
-        <div className="px-5">
+        <div className="">
           <h1 className="max-tablet:text-[28px] text-h-m-b font-bold text-richBlack">
             Profile Details
           </h1>
@@ -246,7 +246,7 @@ const Profile = () => {
 
         <div
           aria-label="user-profile-image"
-          className="overflow-hidden w-full flex flex-col gap-8 justify-center items-center my-6 rounded-lg px-5"
+          className="overflow-hidden w-full flex flex-col gap-8 justify-center items-center my-6 rounded-lg "
         >
           <div
             aria-label="upload-image"
@@ -304,11 +304,13 @@ const Profile = () => {
           {/*  */}
 
           <form
-            onSubmit={submitHandler}
             aria-label="user-input"
             className="gap-8 bg-lightGrey/20 p-4 rounded-lg w-full flex flex-col justify-between"
           >
-            <div id="first-name" className="flex max-tablet:flex-col  justify-between">
+            <div
+              id="first-name"
+              className="flex max-tablet:flex-col  justify-between"
+            >
               {error && email.length <= 0 && (
                 <span className="relative inline-block translate-y-[3.2rem] -translate-x-4">
                   Can't be empty
@@ -329,7 +331,10 @@ const Profile = () => {
                 className="max-tablet:w-full w-[85%] p-3 h-12 bg-[left_0.4rem_bottom_0.8rem] outline-none bg-[length:15px] border-solid border-2  rounded-lg focus:border focus:border-solid  focus:border-royalBlue  focus:drop-shadow-input placeholder:text-mediumGrey/50"
               />
             </div>
-            <div id="last-name" className="flex max-tablet:flex-col  justify-between ">
+            <div
+              id="last-name"
+              className="flex max-tablet:flex-col  justify-between "
+            >
               <label
                 htmlFor="lname"
                 className="whitespace-nowrap pr-4 text-b-m text-mediumGrey mb-1"
@@ -345,7 +350,10 @@ const Profile = () => {
                 className="max-tablet:w-full w-[85%] p-3 h-12 bg-[left_0.4rem_bottom_0.8rem] outline-none bg-[length:15px] border-solid border-2  rounded-lg focus:border focus:border-solid  focus:border-royalBlue  focus:drop-shadow-input placeholder:text-mediumGrey/50"
               />
             </div>
-            <div id="Email" className="flex max-tablet:flex-col  justify-between ">
+            <div
+              id="Email"
+              className="flex max-tablet:flex-col  justify-between "
+            >
               <label
                 htmlFor="fname"
                 className="whitespace-nowrap pr-4 text-b-m text-mediumGrey mb-1"
@@ -364,10 +372,10 @@ const Profile = () => {
             </div>
           </form>
         </div>
-        <div className="absolute left-0 bottom-0 border-t-2 border-solid w-full flex justify-end p-4 mb-3 items-center max-laptop:relative">
+        <div className="absolute left-0 bottom-0 border-t-2 border-solid w-full flex justify-end p-4 px-8 mb-3 items-center max-laptop:relative">
           <button
             disabled={(!fname && !lname) || !email}
-            type="submit"
+            onClick={submitHandler}
             className="disabled:bg-lavender disabled:cursor-not-allowed p-3 px-8 mt-4 rounded-lg text-white bg-royalBlue"
           >
             {loadingUpdate || loadingUpload || loadingPreview

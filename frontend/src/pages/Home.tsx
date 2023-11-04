@@ -54,9 +54,9 @@ const Home = () => {
   //Loading user credential
   useEffect(() => {
     if (!loadingUser) {
-      setFname(userFullName.firstName);
-      setLname(userFullName.lastName);
-      setEmail(userFullName.email);
+      setFname(userFullName.firstName ?? "");
+      setLname(userFullName.lastName ?? "");
+      setEmail(userFullName.email ?? "");
       setImage(userFullName.image);
       const storedImage = localStorage.getItem("image");
       if (!userFullName.image || storedImage) {
@@ -74,13 +74,14 @@ const Home = () => {
       }));
 
       updatedLink.forEach((link: LinkType) => {
-        const existingLink = linkItem.find((x) => x._id === link._id);
+        const existingLink = linkItem.find((x) => x?._id === link?._id);
         if (!existingLink) {
           dispatch(addLink(link));
         }
       });
     }
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const AddLink = () => {
     const newLink = { id: linkItem.length + 1, image: "", name: "", link: "" };
@@ -100,23 +101,24 @@ const Home = () => {
   const saveLinkHandler = async () => {
     const isLinkEmpty = linkItem.find((x) => x.link.length === 0);
     const isPlatformEmpty = linkItem.find((x) => x.name.length === 0);
+    const isLinkItemTrue = linkItem.length;
 
     try {
-      if (isLinkEmpty) {
+      if (isLinkItemTrue && isLinkEmpty) {
         setLinkError(true);
         return;
       }
-      if (isPlatformEmpty) {
+      if (isLinkItemTrue && isPlatformEmpty) {
         setPlatformError(true);
         return;
       }
 
-      let valid;
+      let valid = true;
       linkItem.forEach((x) => {
         valid = isValidUrl(x.link);
       });
 
-      if (!valid) {
+      if (isLinkItemTrue && !valid) {
         return;
       }
 
@@ -137,7 +139,7 @@ const Home = () => {
   };
 
   return (
-    <div className="grid max-laptop:grid-cols-1 max-desktop:grid-cols-[1fr_1fr] grid-cols-[780px_1fr] gap-5 px-5 ">
+    <div className="grid max-laptop:grid-cols-1 max-desktop:grid-cols-[1fr_1fr] grid-cols-[780px_1fr] gap-5 ">
       <div
         id="left"
         className="bg-white p-[5rem] flex justify-center rounded-lg max-laptop:hidden "

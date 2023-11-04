@@ -9,18 +9,20 @@ const Header = () => {
         id="header-content"
         className="flex items-center justify-between p-4 bg-white"
       >
-        <img
-          src="/images/logo-devlinks-large.svg"
-          alt="logo"
-          className="w-[10rem] max-tablet:hidden"
-        />
-        <img
-          src="/images/logo-devlinks-small.svg"
-          alt="logo"
-          className="w-[2.5rem] tablet:hidden"
-        />
+        <Link to="/" aria-label="Homepage Link">
+          <img
+            src="/images/logo-devlinks-large.svg"
+            alt="logo"
+            className="w-[10rem] max-tablet:hidden"
+          />
+          <img
+            src="/images/logo-devlinks-small.svg"
+            alt="logo"
+            className="w-[2.5rem] tablet:hidden"
+          />
+        </Link>
 
-        <nav className="flex gap-4 items-center relative lg:-translate-x-[15%] ">
+        <nav className="flex gap-4 items-center relative -translate-x-[25%] max-desktop:translate-x-0 ">
           <Link
             to="/"
             className={`px-4 text-mediumGrey p-3 font-bold rounded-lg ${
