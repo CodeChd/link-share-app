@@ -92,7 +92,6 @@ const Profile = () => {
     try {
       const res = await uploadImage(formData).unwrap();
       localStorage.setItem("image", res.image);
-      setImage(res.image);
       toast.success(res.message);
     } catch (error) {
       console.log(error);
@@ -261,8 +260,8 @@ const Profile = () => {
             >
               <img
                 src={image as string}
-                alt=""
-                className="absolute inset-0 object-cover h-full rounded-md "
+                alt="profile-image"
+                className="absolute inset-0 object-cover w-full h-full rounded-md "
               />
               <input
                 type="file"

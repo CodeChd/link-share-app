@@ -1,12 +1,14 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useGetLinksQuery, useGetUserProfileQuery } from "../context/apiSlice";
 import { useEffect, useState } from "react";
 import { LINKS_URL } from "../constants";
 import { platformColorMap } from "../data/platformColorMap";
 import { LinkType } from "../context/linkSlice";
 import { platformCustomIconMap } from "../data/platformCustomIconMap";
+import toast from "react-hot-toast";
 
 const Preview = () => {
+  const location = useLocation();
   const { data, isLoading: loadingLinks } = useGetLinksQuery(LINKS_URL);
 
   const { data: userFullName, isLoading: loadingUser } =
@@ -17,18 +19,45 @@ const Preview = () => {
   const [email, setEmail] = useState<string>("");
   const [image, setImage] = useState<string | null>("");
 
+  const [userId, setUserId] = useState<string>("");
+
   useEffect(() => {
     if (!loadingUser) {
       setFname(userFullName.firstName);
       setLname(userFullName.lastName);
       setEmail(userFullName.email);
       setImage(userFullName.image);
+      const previewId = localStorage.getItem("userPreviewId");
+      if (previewId) {
+        setUserId(previewId);
+      }
       const storedImage = localStorage.getItem("image");
       if (storedImage) {
         setImage(storedImage);
       }
     }
   }, [userFullName, loadingUser]);
+
+  const copyToClipBoard = () => {
+    const url = `${window.location.origin}${location.pathname}s/${userId}`;
+    navigator.clipboard
+      .writeText(url)
+      .then(() => {
+        toast.custom(
+          <div className="bg-richBlack text-snow flex gap-2 p-4 rounded-xl">
+            <img
+              src="/images/icon-link-copied-to-clipboard.svg"
+              alt="copied-to-clipboard-icon"
+            />
+            The link has been copied to your clipboard!
+          </div>
+        );
+      })
+      .catch((error) => {
+        console.error(error);
+        toast.error("Could not copy URL");
+      });
+  };
 
   return (
     <>
@@ -41,7 +70,10 @@ const Preview = () => {
             >
               Back to Editor
             </Link>
-            <button className="rounded-md p-2 max-tablet:px-3 px-8 text-white bg-royalBlue hover:bg-lavender font-bold ">
+            <button
+              onClick={copyToClipBoard}
+              className="rounded-md p-2 max-tablet:px-3 px-8 text-white bg-royalBlue hover:bg-lavender font-bold "
+            >
               Share Link
             </button>
           </nav>

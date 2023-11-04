@@ -21,20 +21,25 @@ const Login = () => {
     try {
       if (!email || !password) {
         setError(true);
+        return;
       }
       const res = await loginUser({ email, password }).unwrap();
-      dispatch(setCredentials({ isloggedIn: Boolean(res.isloggedIn) }));
+      dispatch(setCredentials({ isloggedIn: res.isloggedIn }));
       toast.success(res.message);
       navigate("/");
     } catch (error: any) {
-      toast.error("Something went wrong!")
+      toast.error("Something went wrong!");
     }
   };
 
   return (
     <div className="grid place-content-center items-center min-h-screen  gap-8 px-4">
       <div className="max-phone:mx-0 max-phone:px-8 mx-auto">
-        <img src="/images/logo-devlinks-large.svg" alt="logo" className="w-56"/>
+        <img
+          src="/images/logo-devlinks-large.svg"
+          alt="logo"
+          className="w-56"
+        />
       </div>
       <form
         className="phone:bg-white max-phone:p-8 p-12 rounded-md phone:w-[30rem] max-w-[650px] max-lg:w-full"
@@ -110,7 +115,7 @@ const Login = () => {
           {isLoading ? "Loading..." : "Login"}
         </button>
 
-        <p className="mt-4 text-center text-mediumGrey">
+        <p className="max-phone:text-sm whitespace-nowrap mt-4 text-center text-mediumGrey">
           Don't have an account?&nbsp;
           <a href="/register" className="text-royalBlue ">
             Create account

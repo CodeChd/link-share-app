@@ -1,11 +1,14 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { platformColorMap } from "../data/platformColorMap";
 import { LinkType } from "../context/linkSlice";
 import { platformCustomIconMap } from "../data/platformCustomIconMap";
 import { useGetUserPublicProfileQuery } from "../context/apiSlice";
+import toast from "react-hot-toast";
 
 const PublicPreview = () => {
+  const location = useLocation();
+
   const { id } = useParams();
   const { data: profile, isLoading: loadingProfile } =
     useGetUserPublicProfileQuery(id);
@@ -22,6 +25,27 @@ const PublicPreview = () => {
     }
   }, [profile, loadingProfile]);
 
+  const copyToClipBoard = () => {
+    const url = `${window.location.origin}${location.pathname}`;
+    navigator.clipboard
+      .writeText(url)
+      .then(() => {
+        toast.custom(
+          <div className="bg-richBlack text-snow flex gap-2 p-4 rounded-xl">
+            <img
+              src="/images/icon-link-copied-to-clipboard.svg"
+              alt="copied-to-clipboard-icon"
+            />
+            The link has been copied to your clipboard!
+          </div>
+        );
+      })
+      .catch((error) => {
+        console.error(error);
+        toast.error("Could not copy URL");
+      });
+  };
+
   return (
     <>
       <div className="bg-royalBlue max-tablet:bg-snow h-[22rem] w-full p-4 rounded-bl-[2rem] rounded-br-[2rem]">
@@ -33,7 +57,10 @@ const PublicPreview = () => {
             >
               Back to Editor
             </Link>
-            <button className="rounded-md p-2 max-tablet:px-3 px-8 text-white bg-royalBlue hover:bg-lavender font-bold ">
+            <button
+              onClick={copyToClipBoard}
+              className="rounded-md p-2 max-tablet:px-3 px-8 text-white bg-royalBlue hover:bg-lavender font-bold "
+            >
               Share Link
             </button>
           </nav>

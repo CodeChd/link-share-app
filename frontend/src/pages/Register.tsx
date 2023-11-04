@@ -42,11 +42,11 @@ const Register = () => {
 
   return (
     <div className="grid place-content-center items-center min-h-screen gap-8 px-4">
-      <div className="mx-auto">
+      <div className="max-phone:mx-0 max-phone:px-8 mx-auto">
         <img src="/images/logo-devlinks-large.svg" alt="logo" />
       </div>
       <form
-        className="bg-white p-12 rounded-md w-[30rem] max-w-[650px] max-lg:w-full"
+        className="phone:bg-white max-phone:p-8 p-12 rounded-md phone:w-[30rem] max-w-[650px] max-lg:w-full"
         onSubmit={(e) => submitHandler(e)}
       >
         <div className="heading ">
@@ -146,7 +146,7 @@ const Register = () => {
           {loadingRegister ? "Loading" : "Register"}
         </button>
 
-        <p className="mt-4 text-center text-mediumGrey">
+        <p className="max-phone:text-sm whitespace-nowrap mt-4 text-center text-mediumGrey">
           Already have an account?{" "}
           <a href="/login" className="text-royalBlue ">
             Login
