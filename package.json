@@ -9,7 +9,7 @@
     "client": "npm run dev --prefix frontend",
     "dev": "concurrently \"npm run server\" \" npm run client\" ",
     "build": "npm install && npm install --prefix frontend && npm run build --prefix frontend",
-    "import": "ts-node backend/seeder.ts",
+    "import": "ts-node backend/seeder.ts", 
     "delete": "ts-node backend/seeder.ts -d"
   },
   "author": "cj",

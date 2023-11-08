@@ -7,6 +7,7 @@ import uploadRoute from "./routes/uploadImageRoute";
 import previewRoute from "./routes/previewRoutes";
 import connectDB from "./config/db";
 import { errorHandler, notFound } from "./middleware/errorHandler";
+import path from "path";
 
 dotenv.config();
 const port = process.env.PORT || 3000;
@@ -23,11 +24,20 @@ app.use("/api/links", linkRoutes);
 app.use("/api/upload", uploadRoute);
 app.use("/api/preview", previewRoute);
 
+if (process.env.NODE_ENV === "production" as string) {
+  const __dirname = path.resolve();
+
+  app.use(express.static(path.join(__dirname, "/frontend/dist")));
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
+  });
+} else {
+  app.get("/", (req: Request, res: Response) => {
+    res.send("Api is running...");
+  });
+}
+
 app.use(notFound);
 app.use(errorHandler);
-
-app.get("/", (req: Request, res: Response) => {
-  res.send("Api is running...");
-});
 
 app.listen(port, () => console.log(`Server is running on port ${port}`));

@@ -39,6 +39,10 @@ const Preview = () => {
   }, [userFullName, loadingUser]);
 
   const copyToClipBoard = () => {
+    if (!userId) {
+      toast.error("Save your profile to copy the link!");
+      return;
+    }
     const url = `${window.location.origin}${location.pathname}s/${userId}`;
     navigator.clipboard
       .writeText(url)

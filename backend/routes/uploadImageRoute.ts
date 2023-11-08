@@ -21,7 +21,9 @@ router.post(
   asyncHandler(async (req: Request, res: Response) => {
     try {
       const cloudinaryAny: any = cloudinary;
+
       const result = await cloudinaryAny.uploader.upload(req.file?.path);
+
       res.status(200).json({
         message: "Image Uploaded",
         image: result.secure_url,
