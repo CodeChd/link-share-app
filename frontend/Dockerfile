@@ -9,4 +9,8 @@ COPY . .
 RUN npm run build
 RUN chown -R user:user /frontend
 USER user  
+
+FROM node:20.9.0-alpine3.18 
 COPY --from=build-stage_prod /frontend/dist /frontend/dist
+EXPOSE 8080
+ENTRYPOINT [ "npm", "run", "preview" ]
