@@ -24,7 +24,7 @@ app.use("/api/links", linkRoutes);
 app.use("/api/upload", uploadRoute);
 app.use("/api/preview", previewRoute);
 
-if (process.env.NODE_ENV === "production" as string) {
+if (process.env.NODE_ENV === ("production" as string)) {
   const __dirname = path.resolve();
 
   app.use(express.static(path.join(__dirname, "/frontend/dist")));

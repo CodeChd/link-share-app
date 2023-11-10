@@ -8,8 +8,8 @@
     "server": "nodemon --watch backend/**/*.ts --exec ts-node backend/server.ts",
     "client": "npm run dev --prefix frontend",
     "dev": "concurrently \"npm run server\" \" npm run client\" ",
-    "build": "npm install",
-    "import": "ts-node backend/seeder.ts", 
+    "build": "npm install && npm install --prefix frontend && npm run build --prefix frontend",
+    "import": "ts-node backend/seeder.ts",
     "delete": "ts-node backend/seeder.ts -d"
   },
   "author": "cj",
