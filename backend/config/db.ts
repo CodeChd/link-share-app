@@ -1,8 +1,10 @@
 import mongoose from "mongoose";
 
+const env = process.env.MONGO_URL || "mongodb://127.0.0.1:27017/devlinks";
+
 async function connectDB() {
   try {
-    await mongoose.connect("mongodb://127.0.0.1:27017/devlinks");
+    await mongoose.connect(env as string);
   } catch (error) {
     console.log(error);
     process.exit(1);

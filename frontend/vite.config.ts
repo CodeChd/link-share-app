@@ -10,5 +10,10 @@ export default defineConfig({
         target: "http://localhost:5000",
       },
     },
+
   },
+  preview:{
+    host: true,
+    port: 8080
+  }
 });

@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+
+  web:
+    image: codechd/link-sharing-app-web:2
+    ports:
+      - 8080:8080
+    restart: unless-stopped
+
+  api:
+    image: codechd/link-sharing-app-api:2
+    ports:
+      - 5000:5000
+    environment:
+      PORT: 5000
+      NODE_ENV: production
+      JWT_SECRET: YOUR_JWT_SECRET
+      MONGO_URL: mongodb://db/devlinks
+      CLOUDINARY_NAME: YOUR_CLOUDINARY_NAME
+      CLOUDINARY_KEY: YOUR_CLOUDINARY_KEY
+      CLOUDINARY_SECRET: YOU_CLOUDINARY_SECRET
+    command: ./backend/docker-entrypoint.sh
+    restart: unless-stopped
+
+  db:
+    image: mongo:6.0.11-jammy
+    ports:
+      - 27017:27017
+    volumes:
+      - devlinks:/data/db
+    restart: unless-stopped
+
+volumes:
+  devlinks:

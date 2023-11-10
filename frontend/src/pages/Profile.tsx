@@ -56,7 +56,7 @@ const Profile = () => {
     if (id) {
       setUserId(id);
     }
-  }, [userFullName, loadingUser]);
+  }, [userFullName, loadingUser ]);
 
   const submitHandler = async () => {
     try {
@@ -261,7 +261,9 @@ const Profile = () => {
               <img
                 src={image as string}
                 alt="profile-image"
-                className="absolute inset-0 object-cover w-full h-full rounded-md "
+                className={`absolute  inset-0 object-cover w-full h-full rounded-md ${
+                  !image && "hidden"
+                }`}
               />
               <input
                 type="file"
