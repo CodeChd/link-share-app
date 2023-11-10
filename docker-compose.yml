@@ -5,11 +5,13 @@ services:
   web:
     build: ./frontend
     ports:
-      - 8080:8080
+      - 80:80
     restart: unless-stopped
 
   api:
-    build: .
+    depends_on:
+      - db
+    build: ./backend
     ports:
       - 5000:5000
     environment:
@@ -20,7 +22,6 @@ services:
       CLOUDINARY_NAME: dgzvju87l
       CLOUDINARY_KEY: 511391632166557
       CLOUDINARY_SECRET: 89aMOnXAKNluoBMPHVcCEtSzEPA
-    command: ./backend/docker-entrypoint.sh
     restart: unless-stopped
 
   db:

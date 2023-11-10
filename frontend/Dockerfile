@@ -6,11 +6,13 @@ USER root
 COPY package*.json ./
 RUN npm install
 COPY . .
-RUN npm run build
 RUN chown -R user:user /frontend
 USER user  
+RUN npm run build
 
-FROM node:20.9.0-alpine3.18 
-COPY --from=build-stage_prod /frontend/dist /frontend/dist
-EXPOSE 8080
-ENTRYPOINT [ "npm", "run", "preview" ]
+
+FROM nginx:mainline-alpine3.18-slim
+RUN rm -rf /usr/share/nginx/html/*
+COPY --from=build-stage_prod /frontend/dist/ /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
