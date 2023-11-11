@@ -6,9 +6,9 @@
   "scripts": {
     "start": "ts-node server.ts",
     "server": "ts-node server.ts",
-    "client": "npm run dev --prefix ../frontend",
+    "client": "npm run dev --prefix frontend",
     "dev": "concurrently \"npm run server\" \" npm run client\" ",
-    "build": "npm install && npm install --prefix ../frontend  && npm run build --prefix ../frontend",
+    "build": "npm install && npm install --prefix frontend  && npm run build --prefix frontend",
     "import": "ts-node seeder.ts",
     "delete": "ts-node seeder.ts -d"
   },
