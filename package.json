@@ -8,7 +8,7 @@
     "server": "ts-node backend/server.ts",
     "client": "npm run dev --prefix frontend",
     "dev": "concurrently \"npm run server\" \" npm run client\" ",
-    "build": "npm install && npm install --prefix frontend && npm run build --prefix frontend",
+    "build": "tsc && npm install && npm install --prefix frontend && npm run build --prefix frontend",
     "import": "ts-node backend/seeder.ts",
     "delete": "ts-node backend/seeder.ts -d"
   },
@@ -22,7 +22,9 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^7.6.3",
     "multer": "^1.4.5-lts.1",
-    "ts-node": "^10.9.1"
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.2"
+
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.5",
