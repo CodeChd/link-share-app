@@ -3,13 +3,17 @@ version: "3.8"
 services:
 
   web:
-    image: codechd/link-sharing-app-web:2
+    image: codechd/link-sharing-app-web:3
     ports:
-      - 8080:8080
+      - 80:80
     restart: unless-stopped
+    volumes:
+      - frontend-dist:/usr/share/nginx/html
 
   api:
-    image: codechd/link-sharing-app-api:2
+    depends_on:
+      - db
+    image: codechd/link-sharing-app-api:3
     ports:
       - 5000:5000
     environment:
@@ -20,8 +24,9 @@ services:
       CLOUDINARY_NAME: YOUR_CLOUDINARY_NAME
       CLOUDINARY_KEY: YOUR_CLOUDINARY_KEY
       CLOUDINARY_SECRET: YOU_CLOUDINARY_SECRET
-    command: ./backend/docker-entrypoint.sh
     restart: unless-stopped
+    volumes:
+      - frontend-dist:/backend/frontend-dist
 
   db:
     image: mongo:6.0.11-jammy
@@ -33,3 +38,4 @@ services:
 
 volumes:
   devlinks:
+  frontend-dist:

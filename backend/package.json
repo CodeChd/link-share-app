@@ -4,13 +4,13 @@
   "description": "share your links to public",
   "main": "server.js",
   "scripts": {
-    "start": "ts-node backend/server.ts",
-    "server": "nodemon --watch backend/**/*.ts --exec ts-node backend/server.ts",
-    "client": "npm run dev --prefix frontend",
+    "start": "ts-node server.ts",
+    "server": "ts-node server.ts",
+    "client": "npm run dev --prefix /frontend",
     "dev": "concurrently \"npm run server\" \" npm run client\" ",
-    "build": "npm install",
-    "import": "ts-node backend/seeder.ts",
-    "delete": "ts-node backend/seeder.ts -d"
+    "build": "npm install && npm install --prefix /frontend  && npm run build --prefix /frontend",
+    "import": "ts-node seeder.ts",
+    "delete": "ts-node seeder.ts -d"
   },
   "author": "cj",
   "license": "ISC",
