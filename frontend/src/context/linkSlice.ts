@@ -40,12 +40,11 @@ const link = createSlice({
       const updatedLinks = state.linkItem.filter((x) => x.id !== idToRemove);
 
       // Updating IDs to accommodate removed items.
-      const updatedLinkItem = updatedLinks.map((link, index) => ({
+      state.linkItem = updatedLinks.map((link, index) => ({
         ...link,
         id: index + 1,
       }));
 
-      state.linkItem = updatedLinkItem;
       localStorage.setItem("userLinks", JSON.stringify(state));
     },
     dragDrop: (
@@ -62,11 +61,11 @@ const link = createSlice({
       linkItemUpdated.splice(toIndex, 0, draggedLink);
 
       // Updating IDs to accommodate moved items.
-      const UpdatedLinks = linkItemUpdated.map((link, index) => ({
+      state.linkItem = linkItemUpdated.map((link, index) => ({
         ...link,
         id: index + 1,
       }));
-      state.linkItem = UpdatedLinks;
+
       localStorage.setItem("userLinks", JSON.stringify(state));
     },
   },

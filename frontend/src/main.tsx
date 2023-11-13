@@ -15,7 +15,7 @@ import Login from "./pages/Login.tsx";
 import Register from "./pages/Register.tsx";
 import Profile from "./pages/Profile.tsx";
 import Preview from "./pages/Preview.tsx";
-import PrivateRoute from "./components/Private/PrivateRoute.tsx";
+import PrivateRoute from "./components/PrivateComponent/PrivateRoute.tsx";
 import PublicPreview from "./pages/PublicPreview.tsx";
 
 const router = createBrowserRouter(

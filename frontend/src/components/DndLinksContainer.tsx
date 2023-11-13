@@ -3,14 +3,14 @@ import Links from "./Links";
 import { useSortable } from "@dnd-kit/sortable";
 import { LinkType } from "../context/linkSlice";
 
-const SortableLinks = ({
+const DndLinksContainer = ({
   linkDetails,
   linkError,
   platformError,
 }: {
   platformError: boolean;
-  linkDetails: LinkType;
   linkError: boolean;
+  linkDetails: LinkType;
 }) => {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({
@@ -39,4 +39,4 @@ const SortableLinks = ({
   );
 };
 
-export default SortableLinks;
+export default DndLinksContainer;
