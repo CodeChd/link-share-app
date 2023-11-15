@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useMemo, useState} from "react";
 import { Link, useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
 import { LINKS_URL } from "../constants";
@@ -19,7 +19,7 @@ const Preview = () => {
 
   const [userId, setUserId] = useState<string>("");
 
-  useEffect(() => {
+  useMemo(() => {
     if (!loadingUser) {
       setFname(userFullName.firstName);
       setLname(userFullName.lastName);
@@ -34,16 +34,16 @@ const Preview = () => {
         setImage(storedImage);
       }
     }
-  }, [userFullName, loadingUser]);
+  }, [userFullName]);
 
   const copyToClipBoard = () => {
     if (!userId) {
       toast.error("Save your profile to copy the link!");
       return;
     }
-    const url = `${window.location.origin}${location.pathname}s/${userId}`;
+    const publicUrl = `${window.location.origin}${location.pathname}s/${userId}`;
     navigator.clipboard
-      .writeText(url)
+      .writeText(publicUrl)
       .then(() => {
         toast.custom(
           <div className="bg-richBlack text-snow flex gap-2 p-4 rounded-xl">

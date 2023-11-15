@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { isValidUrl } from "../utils/isValidUrl";
 import isObjectEmpty from "../utils/isObjectEmpty";
@@ -50,7 +50,7 @@ const Home = () => {
   const [saveLink, { isLoading }] = useCreateLinkMutation();
 
   //Loading user credential
-  useEffect(() => {
+  useMemo(() => {
     if (!loadingUser) {
       setFname(userFullName.firstName ?? "");
       setLname(userFullName.lastName ?? "");

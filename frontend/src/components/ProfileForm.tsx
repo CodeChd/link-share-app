@@ -35,13 +35,13 @@ const ProfileForm = ({
           </span>
         )}
         <label
-          htmlFor="firstName"
+          htmlFor="firstname"
           className="whitespace-nowrap pr-4 text-b-m text-mediumGrey mb-1"
         >
           First name*
         </label>
         <input
-          id="firstName"
+          id="firstname"
           type="text"
           value={firstName}
           onChange={(e) => setFirstName(e.target.value)}
@@ -49,15 +49,15 @@ const ProfileForm = ({
           className="max-tablet:w-full w-[85%] p-3 h-12 bg-[left_0.4rem_bottom_0.8rem] outline-none bg-[length:15px] border-solid border-2  rounded-lg focus:border focus:border-solid  focus:border-royalBlue  focus:drop-shadow-input placeholder:text-mediumGrey/50"
         />
       </div>
-      <div id="lastName" className="flex max-tablet:flex-col  justify-between ">
+      <div id="lastname" className="flex max-tablet:flex-col  justify-between ">
         <label
-          htmlFor="lastName"
+           htmlFor="lastnames"
           className="whitespace-nowrap pr-4 text-b-m text-mediumGrey mb-1"
         >
           Last name*
         </label>
         <input
-          id="lastName"
+          id="lastnames"
           type="text"
           value={lastName}
           onChange={(e) => setLastName(e.target.value)}
@@ -67,7 +67,7 @@ const ProfileForm = ({
       </div>
       <div id="Email" className="flex max-tablet:flex-col  justify-between ">
         <label
-          htmlFor="fname"
+          htmlFor="email"
           className="whitespace-nowrap pr-4 text-b-m text-mediumGrey mb-1"
         >
           Email

@@ -110,7 +110,7 @@ const MobileSvg = ({
             <div className="flex flex-col gap-[0.8rem] relative">
               {linkItems.map((x) => (
                 <a
-                  key={x.id}
+                  key={x._id}
                   href={x.link}
                   target="_blank"
                   className="cursor-pointer grid grid-cols-[auto_1fr_auto] gap-2 px-4 mx-8 h-[44px] rounded-md overflow-hidden items-center text-left drop-shadow-md"
