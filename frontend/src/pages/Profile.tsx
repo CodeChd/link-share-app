@@ -42,8 +42,8 @@ const Profile = () => {
     const [userId, setUserId] = useState<string>("");
 
 
-    const storedImage: string = localStorage.getItem("image") ?? "";
-    const id: string = localStorage.getItem("userPreviewId") ?? "";
+    const profileImage: string = localStorage.getItem("image") ?? "";
+    const userPublicProfileId: string = localStorage.getItem("userPreviewId") ?? "";
 
     // LOAD USER CREDENTIALS
     useMemo(() => {
@@ -53,32 +53,42 @@ const Profile = () => {
             setEmail(userFullName.email ?? "");
             setImage(userFullName.image);
         }
-        setImage(storedImage);
-        setUserId(id);
-    }, [userFullName, loadingUser, storedImage, id]);
+        setImage(profileImage);
+        setUserId(userPublicProfileId);
+    }, [userFullName, loadingUser, profileImage, userPublicProfileId]);
+
+
 
 
     const submitHandler = async () => {
-        try {
-            if (!email || !fname || !lname) {
-                setError(true);
-            }
-
-            await updateProfile({
+        async function uploadPreviewProfile() {
+            return createPreviewProfile({userId}).unwrap();
+        }
+        async function UploadUserData() {
+            return updateProfile({
                 firstName: fname,
                 lastName: lname,
                 email,
                 image,
             }).unwrap();
+        }
 
-            const res = await createPreviewProfile({userId}).unwrap();
-            localStorage.setItem("userPreviewId", res.userId);
+
+        try {
+            if (!email || !fname || !lname) {
+                setError(true);
+            }
+            await UploadUserData();
+            const result = await uploadPreviewProfile();
+            localStorage.setItem("userPreviewId", result.userId);
+
             toast.custom(
                 <div className="bg-richBlack text-snow flex gap-4 p-4 rounded-xl">
                     <img src="/images/icon-changes-saved.svg" alt="saved-icon"/> Your
                     changes have been successfully saved!
                 </div>
             );
+
             refetch();
         } catch (error) {
             toast.error("Something went wrong!");
