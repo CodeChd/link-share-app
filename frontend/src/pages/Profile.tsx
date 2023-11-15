@@ -6,7 +6,7 @@ import {
     useUploadProfileImageMutation,
 } from "../context/apiSlice";
 import {LINKS_URL} from "../constants";
-import { useMemo, useState} from "react";
+import {useMemo, useState} from "react";
 import toast from "react-hot-toast";
 import MobileSvg from "../components/MobileSvg";
 import ProfileForm from "../components/ProfileForm";
@@ -52,12 +52,15 @@ const Profile = () => {
             setLname(userFullName.lastName ?? "");
             setEmail(userFullName.email ?? "");
             setImage(userFullName.image);
+
+            if(profileImage){
+                setImage(profileImage);
+            }
         }
-        setImage(profileImage);
+
         setUserId(userPublicProfileId);
+
     }, [userFullName, loadingUser, profileImage, userPublicProfileId]);
-
-
 
 
     const submitHandler = async () => {
